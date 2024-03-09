@@ -5,6 +5,7 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({
   test: {
     environment: "jsdom",
+    include: ["**/*.spec.[jt]s?(x)", "**/*e2e-spec.[jt]s?(x)"],
     coverage: {
       provider: "istanbul",
       all: true,
