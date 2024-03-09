@@ -12,7 +12,7 @@ export default defineConfig({
       reporter: ["text", "html", "lcov"],
       cleanOnRerun: true,
       reportsDirectory: "./coverage",
-      exclude: ["**/node_modules/**", "**/*.generated.ts", "**/coverage/**", ".eslintrc.js"],
+      exclude: ["**/node_modules/**", "**/*.generated.ts", "**/coverage/**", ".eslintrc.js", "src/main.ts"],
     },
     globals: true,
     root: "./",

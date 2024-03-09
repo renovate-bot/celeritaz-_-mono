@@ -10,6 +10,7 @@ export default defineConfig({
     coverage: {
       ...baseConfig.test.coverage,
       reportsDirectory: "./coverage/e2e",
+      exclude: [...baseConfig.test.coverage.exclude, "**/*.spec.[jt]s?(x)"],
     },
   },
 });
