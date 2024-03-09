@@ -4,6 +4,20 @@ import tsConfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
   test: {
+    environment: 'jsdom',
+    coverage: {
+      provider: 'istanbul',
+      all: true,
+      reporter: ['text', 'html', 'lcov'],
+      cleanOnRerun: true,
+      reportsDirectory: './coverage',
+      exclude: [
+        '**/node_modules/**',
+        '**/*.generated.ts',
+        '**/coverage/**',
+        '.eslintrc.js',
+      ],
+    },
     globals: true,
     root: './',
   },
