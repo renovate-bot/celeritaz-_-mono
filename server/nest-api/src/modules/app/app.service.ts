@@ -1,18 +1,18 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from "@nestjs/common";
 
 @Injectable()
 export class AppService {
   getHello(): string {
-    return 'Hello World!';
+    return "Hello World!";
   }
 
   getTest(id: string) {
     if (!id) {
-      throw new BadRequestException('id is required');
+      throw new BadRequestException("id is required");
     }
     if (id.length < 5) {
-      throw new BadRequestException('id is too short');
+      throw new BadRequestException("id is too short");
     }
-    return 'This is an test response!';
+    return "This is an test response!";
   }
 }
