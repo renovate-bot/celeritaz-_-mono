@@ -7,5 +7,9 @@ export default defineConfig({
   test: {
     ...baseConfig.test,
     include: ["**/*e2e-spec.[jt]s?(x)"],
+    coverage: {
+      ...baseConfig.test.coverage,
+      reportsDirectory: "./coverage/e2e",
+    },
   },
 });
