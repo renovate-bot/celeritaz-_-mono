@@ -4,7 +4,10 @@
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
-    "api": "pnpm dev --filter=nest-api",
+    "api": "pnpm --filter=nest-api dev",
+    "api:test": "pnpm --filter=nest-api test",
+    "api:lint": "pnpm --filter=nest-api lint",
+    "api:build": "pnpm --filter=nest-api build",
     "lint": "turbo lint"
   },
   "devDependencies": {
