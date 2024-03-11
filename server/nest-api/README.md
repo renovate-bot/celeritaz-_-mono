@@ -1,26 +1,3 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
 ## Description
 
@@ -32,42 +9,61 @@
 $ pnpm install
 ```
 
+## Importing Files in the Project
+### Adding .js Extension to the Filename for Imports
+```typescript
+// Normally, we import files like this:
+import file from 'file';
+
+// However, in this project, we import files as follows since the project uses the ESM module.
+// Therefore, we need to add the .js extension to the filename, even if the file is a .ts file.
+// We don't need to do this in the tests.
+import file from 'file.js';
+```
+### Importing Files Using an Alias
+```typescript
+// Normally, we import files like this if the file is in another directory:
+import file from '../../file.js';
+
+// However, in this project, we import files as follows using an alias:
+import file from '~/directory/file.js';
+```
+
+
 ## Running the app
 
 ```bash
 # development
-$ pnpm run start
+$ pnpm dev
 
-# watch mode
-$ pnpm run start:dev
+# debug
+$ pnpm debug
 
-# production mode
-$ pnpm run start:prod
+# build the app
+$ pnpm build
+
+# start the prod mode
+$ pnpm start:prod
 ```
 
 ## Test
 
 ```bash
-# unit tests
-$ pnpm run test
+# All tests
+$ pnpm test
+
+# test watch
+$ pnpm test:watch
+
+# test ui
+$ pnpm test:ui
+
+# Unit tests
+$ pnpm test:unit
 
 # e2e tests
-$ pnpm run test:e2e
+$ pnpm test:e2e
 
 # test coverage
-$ pnpm run test:cov
+$ pnpm test:cov
 ```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
