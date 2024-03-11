@@ -1,8 +1,8 @@
 import { MiddlewareConsumer, Module, RequestMethod } from "@nestjs/common";
 
-import { AppController } from "~/modules/app/app.controller";
-import { AppService } from "~/modules/app/app.service";
-import { LoggerMiddleware } from "~/middlewares/logger.middleware";
+import { AppController } from "~/modules/app/app.controller.js";
+import { AppService } from "~/modules/app/app.service.js";
+import { LoggerMiddleware } from "~/middlewares/logger.middleware.js";
 
 @Module({
   imports: [],
