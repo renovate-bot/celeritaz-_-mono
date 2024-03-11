@@ -9,7 +9,7 @@
     "forceConsistentCasingInFileNames": false,
     "incremental": true,
     "module": "esnext",
-    "moduleResolution": "Node",
+    "moduleResolution": "Bundler",
     "noFallthroughCasesInSwitch": false,
     "noImplicitAny": false,
     "removeComments": true,
