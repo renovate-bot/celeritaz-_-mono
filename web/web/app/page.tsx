@@ -3,6 +3,8 @@ import { Card } from "@repo/ui/card";
 import { Code } from "@repo/ui/code";
 import styles from "./page.module.css";
 import { Button } from "@repo/ui/button";
+import { ReactElement} from "react";
+import { trpc } from "@client/app/trpc";
 
 function Gradient({
   conic,
@@ -12,7 +14,7 @@ function Gradient({
   small?: boolean;
   conic?: boolean;
   className?: string;
-}): JSX.Element {
+}): ReactElement {
   return (
     <span
       className={[
@@ -51,12 +53,15 @@ const LINKS = [
   },
 ];
 
-export default function Page(): JSX.Element {
+export default async function Page() {
+
+  const response = await trpc.hello.query({ name: "world" });
+
   return (
     <main className={styles.main}>
       <div className={styles.description}>
         <p>
-          examples/basic&nbsp;
+          Response: {response} examples/basic&nbsp;
           <Code className={styles.code}>web</Code>
         </p>
         <div>

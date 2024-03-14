@@ -4,10 +4,13 @@
   "extends": "./base.json",
   "compilerOptions": {
     "plugins": [{ "name": "next" }],
-    "module": "ESNext",
+    "module": "esnext",
     "moduleResolution": "Bundler",
     "allowJs": true,
+    "target": "ES2017",
     "jsx": "preserve",
-    "noEmit": true
+    "noEmit": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   }
 }
