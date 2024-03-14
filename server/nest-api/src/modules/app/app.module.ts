@@ -4,8 +4,10 @@ import { AppController } from "~/modules/app/app.controller.js";
 import { AppService } from "~/modules/app/app.service.js";
 import { LoggerMiddleware } from "~/middlewares/logger.middleware.js";
 
+import { TrpcModule } from "../trpc/trpc.module.js";
+
 @Module({
-  imports: [],
+  imports: [TrpcModule],
   controllers: [AppController],
   providers: [AppService],
 })
