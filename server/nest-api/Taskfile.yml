@@ -7,7 +7,7 @@ tasks:
       - pnpm install
     sources:
       - package.json
-      - ../../pnpm-lock.yaml
+      - ../../../pnpm-lock.yaml
     generates:
       - node_modules
 
@@ -57,9 +57,8 @@ tasks:
   parallel:
     desc: Run multiple tasks in parallel
     cmds:
-      - task lint
-      - task test
-      - task tsc
+      - echo "Parallel tasks complete"
+    deps: [tsc, lint, test]
 
   ci-pipeline:
     desc: Run the CI pipeline
