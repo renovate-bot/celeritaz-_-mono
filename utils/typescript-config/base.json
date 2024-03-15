@@ -17,10 +17,10 @@
     "strict": true,
     "target": "ES2022",
     "paths": {
-      "@server/*": [
+      "@backend/nest-api/*": [
         "../../server/nest-api/*"
       ],
-      "@client/*": [
+      "@frontend/*": [
         "../../web/web/*"
       ]
     }
