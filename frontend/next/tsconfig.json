@@ -5,7 +5,12 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["src/*"],
+      "@backend/*": ["../../backend/nest-api/*"],
+    }
   },
   "include": [
     "next-env.d.ts",

@@ -11,7 +11,7 @@ export class TrpcRouter {
   constructor(private readonly trpc: TrpcService) {}
 
   appRouter = this.trpc.router({
-    hello: this.trpc.procedure.input(z.object({ name: z.string().optional() })).query(({ input }) => {
+    hello: this.trpc.procedure.input(z.object({ name: z.string() })).query(({ input }) => {
       return `Hello ${input.name ? input.name : `Bilbo`}`;
     }),
   });
