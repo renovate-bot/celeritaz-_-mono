@@ -4,7 +4,8 @@ import { Code } from "@repo/ui/code";
 import styles from "./page.module.css";
 import { Button } from "@repo/ui/button";
 import { ReactElement} from "react";
-import { trpc } from "@client/app/trpc";
+import { trpc } from "@frontend/src/app/trpc";
+import SampleTest from "@frontend/src/app/components/SampleTest";
 
 function Gradient({
   conic,
@@ -136,6 +137,8 @@ export default async function Page() {
           </div>
         </div>
       </div>
+
+      <SampleTest />
 
       <div className={styles.grid}>
         {LINKS.map(({ title, href, description }) => (
