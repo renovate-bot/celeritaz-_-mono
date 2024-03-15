@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 import { trpc } from "~/app/trpc";
+import { Button } from "~/shared/shadcn/ui/button";
 
 const SampleTest = () => {
   const [count, setCount] = useState(0);
@@ -18,9 +19,7 @@ const SampleTest = () => {
       <h1>
         Client Render: Response from the api <q>{response ? response : "Empty"}</q>
       </h1>
-      <button className={"px-4 py-2 bg-blue-600 rounded text-white"} onClick={makeApiCall}>
-        Make api call
-      </button>
+      <Button onClick={makeApiCall}>Make api call</Button>
     </div>
   );
 };
