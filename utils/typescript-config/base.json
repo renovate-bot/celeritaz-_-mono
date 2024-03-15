@@ -21,7 +21,7 @@
         "../../backend/nest-api/*"
       ],
       "@frontend/*": [
-        "../../frontend/web/*"
+        "../../frontend/next/*"
       ]
     }
 
