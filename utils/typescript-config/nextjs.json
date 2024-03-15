@@ -11,6 +11,8 @@
     "jsx": "preserve",
     "noEmit": true,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "incremental": true,
+    "resolveJsonModule": true
   }
 }
