@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { trpc } from "~/app/trpc";
+import { trpc } from "~/trpc";
 import { Button } from "~/shared/shadcn/ui/button";
 
 const SampleTest = () => {
