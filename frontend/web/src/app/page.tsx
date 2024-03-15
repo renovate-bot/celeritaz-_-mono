@@ -1,11 +1,12 @@
 import { type ReactElement } from "react";
 import Image from "next/image";
 
-import SampleTest from "@frontend/src/app/components/SampleTest";
-import { trpc } from "@frontend/src/app/trpc";
 import { Button } from "@repo/ui/button";
 import { Card } from "@repo/ui/card";
 import { Code } from "@repo/ui/code";
+
+import SampleTest from "~/app/components/SampleTest";
+import { trpc } from "~/app/trpc";
 
 import styles from "./page.module.css";
 

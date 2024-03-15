@@ -1,3 +1,7 @@
+const { resolve} = require("node:path");
+
+const project = resolve(process.cwd(), "tsconfig.json");
+
 /** @type {import("eslint").Linter.Config} */
 module.exports = {
   root: true,
@@ -10,6 +14,13 @@ module.exports = {
   parser: "@typescript-eslint/parser",
   parserOptions: {
     project: true,
+  },
+  settings: {
+    "import/resolver": {
+      typescript: {
+        project,
+      },
+    },
   },
   rules: {
     // These opinionated rules are enabled in stylistic-type-checked above.
@@ -24,12 +35,12 @@ module.exports = {
         fixStyle: "inline-type-imports",
       },
     ],
-    "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
+    "@typescript-eslint/no-unused-vars": ["warn", {argsIgnorePattern: "^_"}],
     "@typescript-eslint/require-await": "off",
     "@typescript-eslint/no-misused-promises": [
       "error",
       {
-        checksVoidReturn: { attributes: false },
+        checksVoidReturn: {attributes: false},
       },
     ],
   },

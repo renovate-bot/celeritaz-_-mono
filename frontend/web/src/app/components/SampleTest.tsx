@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 
-import styles from "@frontend/src/app/page.module.css";
-import { trpc } from "@frontend/src/app/trpc";
+import styles from "~/app/page.module.css";
+import { trpc } from "~/app/trpc";
 
 const SampleTest = () => {
   const [response, setResponse] = useState("");
