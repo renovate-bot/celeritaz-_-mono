@@ -1,15 +1,5 @@
-import SampleTest from "~/app/components/SampleTest";
+import { redirect } from "next/navigation";
 
-export default async function Page() {
-  return (
-    <main>
-      <div>
-        <p>
-          Server Side Rendering - Response: <span className={"font-bold"}>"Test response"</span>
-        </p>
-      </div>
-
-      <SampleTest />
-    </main>
-  );
+export default function Page() {
+  redirect("/dashboard");
 }

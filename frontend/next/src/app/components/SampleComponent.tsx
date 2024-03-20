@@ -1,0 +1,60 @@
+"use client";
+
+import { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+
+import { useUser } from "@auth0/nextjs-auth0/client";
+
+import { Button } from "~/shared/shadcn/ui/button";
+import { trpc } from "~/trpc";
+
+const SampleComponent = () => {
+  const [count, setCount] = useState(0);
+  const [response, setResponse] = useState("");
+
+  const { user, error, isLoading } = useUser();
+
+  const makeApiCall = async () => {
+    const res = await trpc.hello.query({ name: "Test" + count });
+    setCount(count + 1);
+    setResponse(res);
+  };
+  return (
+    <div className={"grid grid-rows-1 gap-2"}>
+      <div>
+        <h5 className={"text-xl"}>Current User Info</h5>
+        <div className={"flex flex-col gap-1 font-mono"}>
+          <p>Current User Logged In: {user?.name}</p>
+          <p>Current User Email: {user?.email}</p>
+          <p>Current User Id: {user?.sub}</p>
+          <p>Current Username: {user?.nickname}</p>
+          <div className={"flex items-center gap-2"}>
+            <p>Current User Picture: </p>
+            <Image src={user?.picture!} alt={user?.name!} width={40} height={40} />
+          </div>
+          <p>Current Email Verified: {user?.email_verified ? "true" : "false"}</p>
+          <p>Current Organization Id: {user?.org_id}</p>
+        </div>
+      </div>
+      <h1>
+        Client Render: Response from the api <q>{response ? response : "Empty"}</q>
+      </h1>
+      <div className={"flex flex-row gap-2"}>
+        <Button onClick={makeApiCall}>Make api call</Button>
+
+        <Link href={"/dashboard"}>
+          <Button>Dashboard</Button>
+        </Link>
+        <Link href={"/patients"}>
+          <Button>Patients</Button>
+        </Link>
+      </div>
+      <Link href={"/api/auth/logout"}>
+        <Button variant={"outline"}>Logout</Button>
+      </Link>
+    </div>
+  );
+};
+
+export default SampleComponent;
