@@ -9,7 +9,8 @@
     "api:test": "pnpm --filter=nest-api test",
     "api:lint": "pnpm --filter=nest-api lint",
     "api:build": "pnpm --filter=nest-api build",
-    "lint": "turbo lint"
+    "lint": "turbo lint",
+    "ui:add": "pnpm --filter=@repo/ui ui:add"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
