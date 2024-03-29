@@ -10,6 +10,7 @@
     "paths": {
       "~/*": ["src/*"],
       "@backend/*": ["../../api/backend/*"],
+      "@ui/*": ["../../packages/ui/src/*"],
     }
   },
   "include": [

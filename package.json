@@ -4,7 +4,7 @@
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
-    "web": "pnpm --filter=@celeritaz/celerihealth-web dev",
+    "web": "pnpm --filter=@celeritaz/celerihealth-frontend dev",
     "api": "pnpm --filter=nest-api dev",
     "api:test": "pnpm --filter=nest-api test",
     "api:lint": "pnpm --filter=nest-api lint",

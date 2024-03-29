@@ -6,7 +6,8 @@ import Link from "next/link";
 
 import { useUser } from "@auth0/nextjs-auth0/client";
 
-import { Button } from "~/shared/shadcn/ui/button";
+import { Button } from "@celeritaz/ui/components/button";
+
 import { trpc } from "~/trpc";
 
 const SampleComponent = () => {

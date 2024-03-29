@@ -22,6 +22,8 @@ module.exports = {
     "",
     "<THIRD_PARTY_MODULES>",
     "",
+    "^(@celeritaz/ui/(.*)$)|^(@celeritaz/ui$)",
+    "",
     "^(~/modules/(.*)$)|^(~/modules$)",
     "^~/(.*)$",
     "",

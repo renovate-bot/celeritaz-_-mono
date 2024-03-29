@@ -6,7 +6,7 @@ import { Inter } from "next/font/google";
 
 import { UserProvider as Auth0Provider } from "@auth0/nextjs-auth0/client";
 
-import { cn } from "~/utils/styles";
+import { cn } from "@celeritaz/ui/lib/utils";
 
 const inter = Inter({ subsets: ["latin"] });
 
