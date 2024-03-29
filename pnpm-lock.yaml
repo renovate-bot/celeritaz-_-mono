@@ -121,6 +121,76 @@ importers:
         specifier: ^1.3.1
         version: 1.4.0(@types/node@20.11.30)(@vitest/ui@1.4.0)(jsdom@24.0.0)
 
+  apps/frontend:
+    dependencies:
+      '@auth0/nextjs-auth0':
+        specifier: ^3.5.0
+        version: 3.5.0(next@14.1.4)
+      '@celeritaz/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
+      '@trpc/client':
+        specifier: ^10.45.2
+        version: 10.45.2(@trpc/server@10.45.2)
+      next:
+        specifier: ^14.1.1
+        version: 14.1.4(react-dom@18.2.0)(react@18.2.0)
+      react:
+        specifier: ^18.2.0
+        version: 18.2.0
+      react-dom:
+        specifier: ^18.2.0
+        version: 18.2.0(react@18.2.0)
+    devDependencies:
+      '@celeritaz/eslint-config':
+        specifier: workspace:*
+        version: link:../../packages/eslint-config
+      '@celeritaz/typescript-config':
+        specifier: workspace:*
+        version: link:../../packages/typescript-config
+      '@next/eslint-plugin-next':
+        specifier: ^14.1.1
+        version: 14.1.4
+      '@types/eslint':
+        specifier: ^8.56.5
+        version: 8.56.6
+      '@types/node':
+        specifier: ^20.11.24
+        version: 20.11.30
+      '@types/react':
+        specifier: ^18.2.61
+        version: 18.2.73
+      '@types/react-dom':
+        specifier: ^18.2.19
+        version: 18.2.23
+      autoprefixer:
+        specifier: ^10.4.18
+        version: 10.4.19(postcss@8.4.38)
+      eslint:
+        specifier: ^8.57.0
+        version: 8.57.0
+      postcss:
+        specifier: ^8.4.35
+        version: 8.4.38
+      postcss-import:
+        specifier: ^16.1.0
+        version: 16.1.0(postcss@8.4.38)
+      prettier-plugin-tailwindcss:
+        specifier: ^0.5.12
+        version: 0.5.13(prettier@3.2.5)
+      tailwindcss:
+        specifier: ^3.4.1
+        version: 3.4.3
+      typescript:
+        specifier: ^5.3.3
+        version: 5.4.3
+
+  apps/frontend-e2e:
+    devDependencies:
+      cypress:
+        specifier: ^13.7.1
+        version: 13.7.1
+
   packages/eslint-config:
     devDependencies:
       '@ianvs/prettier-plugin-sort-imports':
@@ -228,76 +298,6 @@ importers:
       typescript:
         specifier: ^5.3.3
         version: 5.4.3
-
-  web/frontend:
-    dependencies:
-      '@auth0/nextjs-auth0':
-        specifier: ^3.5.0
-        version: 3.5.0(next@14.1.4)
-      '@celeritaz/ui':
-        specifier: workspace:*
-        version: link:../../packages/ui
-      '@trpc/client':
-        specifier: ^10.45.2
-        version: 10.45.2(@trpc/server@10.45.2)
-      next:
-        specifier: ^14.1.1
-        version: 14.1.4(react-dom@18.2.0)(react@18.2.0)
-      react:
-        specifier: ^18.2.0
-        version: 18.2.0
-      react-dom:
-        specifier: ^18.2.0
-        version: 18.2.0(react@18.2.0)
-    devDependencies:
-      '@celeritaz/eslint-config':
-        specifier: workspace:*
-        version: link:../../packages/eslint-config
-      '@celeritaz/typescript-config':
-        specifier: workspace:*
-        version: link:../../packages/typescript-config
-      '@next/eslint-plugin-next':
-        specifier: ^14.1.1
-        version: 14.1.4
-      '@types/eslint':
-        specifier: ^8.56.5
-        version: 8.56.6
-      '@types/node':
-        specifier: ^20.11.24
-        version: 20.11.30
-      '@types/react':
-        specifier: ^18.2.61
-        version: 18.2.73
-      '@types/react-dom':
-        specifier: ^18.2.19
-        version: 18.2.23
-      autoprefixer:
-        specifier: ^10.4.18
-        version: 10.4.19(postcss@8.4.38)
-      eslint:
-        specifier: ^8.57.0
-        version: 8.57.0
-      postcss:
-        specifier: ^8.4.35
-        version: 8.4.38
-      postcss-import:
-        specifier: ^16.1.0
-        version: 16.1.0(postcss@8.4.38)
-      prettier-plugin-tailwindcss:
-        specifier: ^0.5.12
-        version: 0.5.13(prettier@3.2.5)
-      tailwindcss:
-        specifier: ^3.4.1
-        version: 3.4.3
-      typescript:
-        specifier: ^5.3.3
-        version: 5.4.3
-
-  web/frontend-e2e:
-    devDependencies:
-      cypress:
-        specifier: ^13.7.1
-        version: 13.7.1
 
 packages:
 
