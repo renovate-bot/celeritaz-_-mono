@@ -5,6 +5,7 @@
   "exports": {
     "./tailwind.config": "./tailwind.config.ts",
     "./components/*": "./src/shadcn/ui/*.tsx",
+    "./lib/*": "./src/lib/*.ts",
     "./globals.css": "./src/globals.css"
   },
   "scripts": {
