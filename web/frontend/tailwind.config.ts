@@ -1,4 +1,4 @@
-import baseTailwindConfig from "@repo/ui/tailwind.config";
+import baseTailwindConfig from "@celeritaz/ui/tailwind.config";
 
 import type { Config } from "tailwindcss";
 

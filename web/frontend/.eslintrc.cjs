@@ -6,7 +6,7 @@ const project = resolve(process.cwd(), "tsconfig.json");
 module.exports = {
   root: true,
   extends: [
-    "@repo/eslint-config/next.js",
+    "@celeritaz/eslint-config/next.js",
     "plugin:@typescript-eslint/recommended-type-checked",
     "plugin:@typescript-eslint/stylistic-type-checked",
     "plugin:prettier/recommended"

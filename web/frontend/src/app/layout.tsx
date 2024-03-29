@@ -1,4 +1,4 @@
-import "@repo/ui/globals.css";
+import "@celeritaz/ui/globals.css";
 
 import { type ReactElement } from "react";
 import { type Metadata } from "next";

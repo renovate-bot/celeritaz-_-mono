@@ -1,5 +1,5 @@
 {
-  "name": "nest-api",
+  "name": "@celeritaz/celerihealth-api",
   "version": "1.0.0",
   "description": "",
   "author": "Celeritaz Team",
@@ -38,8 +38,8 @@
     "@nestjs/cli": "^10.3.2",
     "@nestjs/schematics": "^10.1.1",
     "@nestjs/testing": "^10.3.3",
-    "@repo/eslint-config": "workspace:^",
-    "@repo/typescript-config": "workspace:^",
+    "@celeritaz/eslint-config": "workspace:^",
+    "@celeritaz/typescript-config": "workspace:^",
     "@swc/cli": "^0.3.10",
     "@swc/core": "^1.4.5",
     "@types/express": "^4.17.17",

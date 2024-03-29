@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  transpilePackages: ["@repo/ui"],
+  transpilePackages: ["@celeritaz/ui"],
   images: {
     domains: ["localhost", "res.cloudinary.com", "s.gravatar.com"]
   }
