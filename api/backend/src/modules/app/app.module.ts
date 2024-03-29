@@ -1,10 +1,10 @@
 import { MiddlewareConsumer, Module, RequestMethod } from "@nestjs/common";
 
-import { AppController } from "~/modules/app/app.controller.js";
-import { AppService } from "~/modules/app/app.service.js";
-import { LoggerMiddleware } from "~/middlewares/logger.middleware.js";
+import { AppController } from "~/modules/app/app.controller.ts";
+import { AppService } from "~/modules/app/app.service.ts";
+import { LoggerMiddleware } from "~/middlewares/logger.middleware.ts";
 
-import { TrpcModule } from "../trpc/trpc.module.js";
+import { TrpcModule } from "../trpc/trpc.module.ts";
 
 @Module({
   imports: [TrpcModule],

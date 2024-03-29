@@ -1,9 +1,8 @@
-
 {
   "$schema": "https://json.schemastore.org/swcrc",
   "sourceMaps": true,
   "module": {
-    "type": "es6"
+    "type": "nodenext"
   },
   "jsc": {
     "parser": {
@@ -15,7 +14,21 @@
       "legacyDecorator": true,
       "decoratorMetadata": true
     },
-    "baseUrl": "./"
+    "target": "esnext",
+    "baseUrl": "./",
+    "experimental": {
+      "plugins": [
+        [
+          "@swc/plugin-transform-imports",
+          {
+            "^(.*?)(\\.ts)$": {
+              "skipDefaultConversion": true,
+              "transform": "{{matches.[1]}}.js"
+            }
+          }
+        ]
+      ]
+    }
   },
   "minify": false
 }

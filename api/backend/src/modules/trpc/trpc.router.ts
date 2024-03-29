@@ -4,7 +4,7 @@ import { NestFastifyApplication } from "@nestjs/platform-fastify";
 import { fastifyTRPCPlugin, FastifyTRPCPluginOptions } from "@trpc/server/adapters/fastify";
 import { z } from "zod";
 
-import { TrpcService } from "./trpc.service.js";
+import { TrpcService } from "./trpc.service.ts";
 
 @Injectable()
 export class TrpcRouter {

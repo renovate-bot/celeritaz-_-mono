@@ -9,7 +9,9 @@
       "vitest/globals",
       "vitest/jsdom"
     ],
-    "target": "ES2017"
+    "target": "ES2017",
+    "allowImportingTsExtensions": true,
+    "noEmit": true
   },
   "exclude": [ "node_modules", "dist"]
 }
