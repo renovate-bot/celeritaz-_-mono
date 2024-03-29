@@ -1,0 +1,15 @@
+{
+  "extends": "@celeritaz/typescript-config/nest-api.json",
+  "display": "Nest API",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist",
+    "paths": { "~/*": [ "src/*" ] },
+    "types": [
+      "vitest/globals",
+      "vitest/jsdom"
+    ],
+    "target": "ES2017"
+  },
+  "exclude": [ "node_modules", "dist"]
+}
