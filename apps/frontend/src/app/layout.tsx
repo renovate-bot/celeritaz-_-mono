@@ -10,6 +10,8 @@ import { GeistSans } from "geist/font/sans";
 
 import { cn } from "@celeritaz/ui/lib/utils";
 
+import ThemeProvider from "~/providers/ThemeProvider.tsx";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -21,7 +23,9 @@ export default function RootLayout({ children }: { children: ReactElement }): Re
   return (
     <html lang="en">
       <body className={cn("bg-background", inter.className, GeistSans.variable, GeistMono.variable)}>
-        <Auth0Provider>{children}</Auth0Provider>
+        <ThemeProvider attribute={"class"} defaultTheme={"system"} disableTransitionOnChange>
+          <Auth0Provider>{children}</Auth0Provider>
+        </ThemeProvider>
       </body>
     </html>
   );

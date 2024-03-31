@@ -2,6 +2,7 @@ import { type ReactElement } from "react";
 import { type Metadata } from "next";
 
 import AuthGuard from "~/guards/AuthGuard";
+import ThemeToggleButton from "~/shared/custom/theme-toggle-button";
 
 // Todo: Add the layout for the dashboard here
 export const metadata: Metadata = {
@@ -10,7 +11,14 @@ export const metadata: Metadata = {
 };
 
 const Layout = ({ children }: { children: ReactElement }) => {
-  return <AuthGuard>{children}</AuthGuard>;
+  return (
+    <AuthGuard>
+      <>
+        {children}
+        <ThemeToggleButton />
+      </>
+    </AuthGuard>
+  );
 };
 
 export default Layout;
