@@ -16,6 +16,7 @@
     "@auth0/nextjs-auth0": "^3.5.0",
     "@celeritaz/ui": "workspace:*",
     "@trpc/client": "^10.45.2",
+    "geist": "^1.3.0",
     "next": "^14.1.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"

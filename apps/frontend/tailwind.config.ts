@@ -12,7 +12,14 @@ const config = {
     "../../packages/ui/src/**/*.{ts,tsx}"
   ],
   presets: [baseTailwindConfig],
-  theme: {}
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ["var(--font-geist-sans)"],
+        mono: ["var(--font-geist-mono)"]
+      }
+    }
+  }
 } satisfies Config;
 
 export default config;

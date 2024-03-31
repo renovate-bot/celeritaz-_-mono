@@ -5,6 +5,8 @@ import { type Metadata } from "next";
 import { Inter } from "next/font/google";
 
 import { UserProvider as Auth0Provider } from "@auth0/nextjs-auth0/client";
+import { GeistMono } from "geist/font/mono";
+import { GeistSans } from "geist/font/sans";
 
 import { cn } from "@celeritaz/ui/lib/utils";
 
@@ -18,7 +20,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: ReactElement }): ReactElement {
   return (
     <html lang="en">
-      <body className={cn("bg-background", inter.className)}>
+      <body className={cn("bg-background", inter.className, GeistSans.variable, GeistMono.variable)}>
         <Auth0Provider>{children}</Auth0Provider>
       </body>
     </html>
