@@ -19,8 +19,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactElement }): ReactElement {
   return (
-    <html lang="en">
-      <body className={cn("bg-background", GeistSans.variable, GeistMono.variable)}>
+    <html lang="en" className={cn(GeistSans.variable, GeistMono.variable)}>
+      <body className={cn("bg-background font-sans")}>
         <ThemeProvider attribute={"class"} defaultTheme={"system"} disableTransitionOnChange>
           <Auth0Provider>{children}</Auth0Provider>
           <TailwindIndicator />
