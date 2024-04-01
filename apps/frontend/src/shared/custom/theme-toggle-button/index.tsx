@@ -6,7 +6,7 @@ import { useTheme } from "next-themes";
 
 import type { ButtonProps } from "@ui/shadcn/ui/button.tsx";
 
-const Index = (props: ButtonProps) => {
+const ThemeToggleButton = (props: ButtonProps) => {
   const { setTheme, theme } = useTheme();
 
   return (
@@ -24,4 +24,4 @@ const Index = (props: ButtonProps) => {
   );
 };
 
-export default Index;
+export default ThemeToggleButton;
