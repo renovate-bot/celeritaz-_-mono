@@ -2,7 +2,7 @@ import { Grid, LayoutPanelLeft } from "lucide-react";
 
 import type { ReactElement } from "react";
 
-type SidebarLinkProps = Record<
+export type SidebarLinkType = Record<
   string,
   {
     subTitle?: string;
@@ -17,7 +17,7 @@ type SidebarLinkProps = Record<
   }
 >;
 
-export const SIDEBAR_LINKS: SidebarLinkProps = {
+export const SIDEBAR_LINKS: SidebarLinkType = {
   home: {
     name: "Dashboard",
     href: "/dashboard",

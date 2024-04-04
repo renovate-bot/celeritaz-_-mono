@@ -5,7 +5,9 @@ import ThemeToggleButton from "~/shared/custom/theme-toggle-button";
 
 const TopBar = () => {
   return (
-    <header className="sticky top-0 z-40 w-full border-b bg-background shadow-sm">
+    <header
+      data-testid={"topbar"}
+      className="sticky top-0 z-40 w-full border-b bg-background shadow-sm">
       <div className="flex h-16 items-center px-4 sm:justify-between sm:space-x-0 sm:px-[1rem]">
         <Button variant={"outline"} size={"icon"} className={"mr-2 xl:hidden"}>
           <HamburgerMenuIcon className={"h-4 w-4"} />
