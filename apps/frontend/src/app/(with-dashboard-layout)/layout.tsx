@@ -1,25 +1,20 @@
 import { type ReactElement } from "react";
 import { type Metadata } from "next";
 
-import { TooltipProvider } from "@ui/shadcn/ui/tooltip.tsx";
-
-import Layout from "~/app/(with-dashboard-layout)/components/layout";
+import DashboardLayout from "~/app/(with-dashboard-layout)/components/dashboard-layout";
 import AuthGuard from "~/guards/AuthGuard";
 
-// Todo: Add the layout for the dashboard here
 export const metadata: Metadata = {
   title: "CeleriHealth - Home",
   description: "CeleriHealth is a health care platform."
 };
 
-const DashboardLayout = ({ children }: { children: ReactElement }) => {
+const Layout = ({ children }: { children: ReactElement }) => {
   return (
     <AuthGuard>
-      <TooltipProvider>
-        <Layout>{children}</Layout>
-      </TooltipProvider>
+      <DashboardLayout>{children}</DashboardLayout>
     </AuthGuard>
   );
 };
 
-export default DashboardLayout;
+export default Layout;
