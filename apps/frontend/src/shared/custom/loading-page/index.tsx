@@ -16,7 +16,9 @@ const LoadingPage = ({
         <h2 className="text-4xl font-extrabold tracking-tight text-primary">{title}</h2>
       </div>
       {description && (
-        <p className="text-md mt-4 font-medium text-primary opacity-40 2xl:text-lg">{description}</p>
+        <p className="text-md mt-4 font-medium text-primary opacity-40 2xl:text-lg">
+          {description}
+        </p>
       )}
     </div>
   );

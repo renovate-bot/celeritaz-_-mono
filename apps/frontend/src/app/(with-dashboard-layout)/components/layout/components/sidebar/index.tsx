@@ -81,7 +81,10 @@ const SidebarButton = memo(
             </Button>
           </CustomLink>
         </TooltipTrigger>
-        <TooltipContent side={"right"} className={cn("z-[100]", !isIconsOnly && "hidden")} sideOffset={4}>
+        <TooltipContent
+          side={"right"}
+          className={cn("z-[100]", !isIconsOnly && "hidden")}
+          sideOffset={4}>
           {name}
         </TooltipContent>
       </Tooltip>

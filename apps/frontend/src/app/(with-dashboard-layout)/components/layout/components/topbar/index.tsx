@@ -11,7 +11,10 @@ const TopBar = () => {
           <HamburgerMenuIcon className={"h-4 w-4"} />
         </Button>
         <div className={"flex flex-row items-center gap-2"}>
-          <h3 className={"mr-4 text-xl font-bold leading-none tracking-tight text-primary lg:text-3xl"}>
+          <h3
+            className={
+              "mr-4 text-xl font-bold leading-none tracking-tight text-primary lg:text-3xl"
+            }>
             CeleriHealth
           </h3>
         </div>
