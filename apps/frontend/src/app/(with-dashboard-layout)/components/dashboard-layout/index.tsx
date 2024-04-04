@@ -9,7 +9,7 @@ import type { ReactElement } from "react";
 
 const Layout = ({ children }: { children: ReactElement }) => {
   return (
-    <TooltipProvider delayDuration={0}>
+    <TooltipProvider>
       <div className={"relative flex min-h-screen flex-col"}>
         <Topbar />
         <div className={"flex max-h-[calc(100vh-4.2rem)] flex-1"}>

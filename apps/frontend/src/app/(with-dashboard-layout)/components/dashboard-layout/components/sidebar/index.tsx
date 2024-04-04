@@ -10,40 +10,10 @@ import { Button } from "@ui/shadcn/ui/button";
 import { ScrollArea } from "@ui/shadcn/ui/scroll-area";
 import { Separator } from "@ui/shadcn/ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@ui/shadcn/ui/tooltip";
-import { Grid, LayoutPanelLeft } from "lucide-react";
+
+import { SIDEBAR_LINKS } from "~/app/(with-dashboard-layout)/components/dashboard-layout/components/sidebar/components/sidebar-links.tsx";
 
 import type { ReactElement } from "react";
-
-const pages: Record<
-  string,
-  {
-    subTitle?: string;
-    name?: string;
-    href?: string;
-    icon?: ReactElement;
-    subMenu?: Array<{
-      name: string;
-      href: string;
-      icon: ReactElement;
-    }>;
-  }
-> = {
-  home: {
-    name: "Dashboard",
-    href: "/dashboard",
-    icon: <LayoutPanelLeft />
-  },
-  patients: {
-    subTitle: "Patient Management",
-    subMenu: [
-      {
-        name: "Patients",
-        href: "/patients",
-        icon: <Grid />
-      }
-    ]
-  }
-};
 
 const SidebarButton = memo(
   ({
@@ -60,7 +30,7 @@ const SidebarButton = memo(
     isIconsOnly: boolean;
   }) => {
     return (
-      <Tooltip delayDuration={300}>
+      <Tooltip delayDuration={0}>
         <TooltipTrigger asChild>
           <CustomLink href={link} className={"m-0 w-full"}>
             <Button
@@ -110,24 +80,24 @@ const SidebarList = memo(({ iconsOnly }: { iconsOnly: boolean }) => {
         className={cn("h-full w-60 transition-all duration-150 ease-in-out", iconsOnly && "w-16")}
         scrollHideDelay={300}>
         <div className={"flex flex-col justify-center gap-2 px-3 py-4"}>
-          {Object.entries(pages).map(([_, page]) => {
-            if (page?.subTitle) {
+          {Object.entries(SIDEBAR_LINKS).map(([_, sidebarLink]) => {
+            if (sidebarLink?.subTitle) {
               return (
-                <Fragment key={page.subTitle}>
+                <Fragment key={sidebarLink.subTitle}>
                   {!iconsOnly ? (
                     <p
                       className={
                         "!mb-1 !mt-3 px-2 text-xs uppercase leading-4 text-muted-foreground duration-150"
                       }>
-                      {page.subTitle}
+                      {sidebarLink.subTitle}
                     </p>
                   ) : (
                     <Separator className={cn("!my-2 bg-primary/20")} />
                   )}
 
-                  {page.subMenu && (
+                  {sidebarLink.subMenu && (
                     <div className={"flex flex-col gap-2"}>
-                      {page.subMenu?.map((subPage) => (
+                      {sidebarLink.subMenu?.map((subPage) => (
                         <SidebarButton
                           key={subPage.name}
                           name={subPage.name}
@@ -142,14 +112,14 @@ const SidebarList = memo(({ iconsOnly }: { iconsOnly: boolean }) => {
                 </Fragment>
               );
             }
-            if (page?.name) {
+            if (sidebarLink?.name) {
               return (
                 <SidebarButton
-                  key={page.name}
-                  name={page.name}
-                  link={page?.href ?? ""}
-                  icon={page?.icon ?? <></>}
-                  isActive={checkIfActive(page?.href ?? "")}
+                  key={sidebarLink.name}
+                  name={sidebarLink.name}
+                  link={sidebarLink?.href ?? ""}
+                  icon={sidebarLink?.icon ?? <></>}
+                  isActive={checkIfActive(sidebarLink?.href ?? "")}
                   isIconsOnly={iconsOnly}
                 />
               );
