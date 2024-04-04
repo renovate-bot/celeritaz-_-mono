@@ -1,7 +1,7 @@
 import PageContainer from ".";
 import { describe, expect } from "vitest";
 
-import { render, screen } from "~/tests/test-utils.tsx";
+import { render, screen } from "~/tests/test-utils";
 
 describe("Page Container", () => {
   it("should render a page container with the children inside it", () => {

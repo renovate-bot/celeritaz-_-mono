@@ -1,10 +1,10 @@
 "use client";
 
 import { MoonIcon, SunIcon } from "@radix-ui/react-icons";
-import { Button } from "@ui/shadcn/ui/button.tsx";
+import { Button } from "@ui/shadcn/ui/button";
 import { useTheme } from "next-themes";
 
-import type { ButtonProps } from "@ui/shadcn/ui/button.tsx";
+import type { ButtonProps } from "@ui/shadcn/ui/button";
 
 const ThemeToggleButton = (props: ButtonProps) => {
   const { setTheme, theme } = useTheme();

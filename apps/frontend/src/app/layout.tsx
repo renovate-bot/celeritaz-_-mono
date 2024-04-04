@@ -9,7 +9,7 @@ import { GeistSans } from "geist/font/sans";
 
 import { cn } from "@celeritaz/ui/lib/utils";
 
-import ThemeProvider from "~/providers/ThemeProvider.tsx";
+import ThemeProvider from "~/providers/ThemeProvider";
 import TailwindIndicator from "~/shared/custom/tailwind-indicator";
 
 export const metadata: Metadata = {

@@ -11,7 +11,7 @@ import { ScrollArea } from "@ui/shadcn/ui/scroll-area";
 import { Separator } from "@ui/shadcn/ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@ui/shadcn/ui/tooltip";
 
-import { SIDEBAR_LINKS } from "~/app/(with-dashboard-layout)/components/dashboard-layout/components/sidebar/components/sidebar-links.tsx";
+import { SIDEBAR_LINKS } from "~/app/(with-dashboard-layout)/components/dashboard-layout/components/sidebar/components/sidebar-links";
 
 import type { ReactElement } from "react";
 
@@ -140,7 +140,7 @@ const DesktopSidebar = memo(() => {
   }, [isIconsOnly]);
 
   return (
-    <div className={"hidden duration-150 xl:relative xl:block"}>
+    <div data-testid={"desktop-sidebar"} className={"hidden duration-150 xl:relative xl:block"}>
       <SidebarList iconsOnly={isIconsOnly} />
       <Button
         variant={"outline"}

@@ -1,7 +1,7 @@
 import { render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-import ThemeProvider from "~/providers/ThemeProvider.tsx";
+import ThemeProvider from "~/providers/ThemeProvider";
 
 import type { RenderOptions, RenderResult } from "@testing-library/react";
 import type { UserEvent } from "@testing-library/user-event";
