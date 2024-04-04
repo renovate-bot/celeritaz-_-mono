@@ -41,19 +41,21 @@ const SampleComponent = () => {
       <h1>
         Client Render: Response from the api <q>{response ? response : "Empty"}</q>
       </h1>
-      <div className={"flex flex-row gap-2"}>
-        <Button onClick={makeApiCall}>Make api call</Button>
+      <div className={"flex flex-wrap gap-2"}>
+        <Button className={"w-fit"} onClick={makeApiCall}>
+          Make api call
+        </Button>
 
-        <Link href={"/dashboard"}>
+        <Link href={"/dashboard"} className={"w-fit"}>
           <Button>Dashboard</Button>
         </Link>
-        <Link href={"/patients"}>
+        <Link href={"/patients"} className={"w-fit"}>
           <Button>Patients</Button>
         </Link>
+        <Link href={"/api/auth/logout"} className={"w-fit"}>
+          <Button variant={"outline"}>Logout</Button>
+        </Link>
       </div>
-      <Link href={"/api/auth/logout"}>
-        <Button variant={"outline"}>Logout</Button>
-      </Link>
     </div>
   );
 };
