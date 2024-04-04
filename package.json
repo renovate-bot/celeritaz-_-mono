@@ -5,6 +5,7 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "web": "pnpm --filter=@celeritaz/celerihealth-frontend dev",
+    "web:test": "pnpm --filter=@celeritaz/celerihealth-frontend test:unit",
     "api": "pnpm --filter=nest-api dev",
     "api:test": "pnpm --filter=nest-api test",
     "api:lint": "pnpm --filter=nest-api lint",

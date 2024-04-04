@@ -7,7 +7,7 @@ module.exports = {
     "prettier-plugin-tailwindcss"
   ],
   singleQuote: false,
-  printWidth: 110,
+  printWidth: 100,
   bracketSameLine: true,
   endOfLine: "auto",
   semi: true,
