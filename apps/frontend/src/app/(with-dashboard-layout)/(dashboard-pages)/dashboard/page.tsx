@@ -1,4 +1,4 @@
-import SampleComponent from "~/app/components/SampleComponent";
+import SampleComponent from "~/app/(with-dashboard-layout)/components/sample-component";
 import PageContainer from "~/shared/custom/page-container";
 import PageHeading from "~/shared/custom/page-heading";
 
