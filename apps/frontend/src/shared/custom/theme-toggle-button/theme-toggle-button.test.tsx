@@ -1,46 +1,40 @@
-import { act } from "@testing-library/react";
+import { type ReactElement } from "react";
+
+import { screen } from "@testing-library/react";
 import { useTheme } from "next-themes";
 import { describe } from "vitest";
 
 import ThemeToggleButton from "~/shared/custom/theme-toggle-button/index.tsx";
-import { render } from "~/tests/test-utils.tsx";
+import { render, userEventSetup } from "~/tests/test-utils.tsx";
 
-const ThemeSpy = () => {
+const ThemeToggleWithSpy = (): ReactElement => {
   const { theme } = useTheme();
-  return <span data-testid="theme-spy">{theme}</span>;
+  return (
+    <>
+      <ThemeToggleButton />
+      <span data-testid="theme-spy">{theme}</span>
+    </>
+  );
 };
 
 describe("Theme Toggle Button", () => {
   it("should have the default light theme", () => {
-    const { getByTestId } = render(
-      <>
-        <ThemeToggleButton />
-        <ThemeSpy />
-      </>
-    );
+    const { getByTestId } = render(<ThemeToggleWithSpy />);
     const spy = getByTestId("theme-spy");
 
     expect(spy.textContent).toBe("light");
   });
 
-  it("should toggle the theme when clicked", () => {
-    const { getByTestId } = render(
-      <>
-        <ThemeToggleButton />
-        <ThemeSpy />
-      </>
-    );
-    const button = getByTestId("theme-toggle-button");
-    const spy = getByTestId("theme-spy");
+  it("should toggle the theme when clicked", async () => {
+    const { user } = userEventSetup(<ThemeToggleWithSpy />);
 
-    act(() => {
-      button.click();
-    });
+    const button = screen.getByTestId("theme-toggle-button");
+    const spy = screen.getByTestId("theme-spy");
+
+    await user.click(button);
     expect(spy.textContent).toBe("dark");
 
-    act(() => {
-      button.click();
-    });
+    await user.click(button);
     expect(spy.textContent).toBe("light");
   });
 });
