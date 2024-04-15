@@ -1,7 +1,7 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 import { api } from "~/trpc/react";
 
@@ -13,7 +13,7 @@ export function CreatePost() {
     onSuccess: () => {
       router.refresh();
       setName("");
-    },
+    }
   });
 
   return (
@@ -22,8 +22,7 @@ export function CreatePost() {
         e.preventDefault();
         createPost.mutate({ name });
       }}
-      className="flex flex-col gap-2"
-    >
+      className="flex flex-col gap-2">
       <input
         type="text"
         placeholder="Title"
@@ -34,8 +33,7 @@ export function CreatePost() {
       <button
         type="submit"
         className="rounded-full bg-white/10 px-10 py-3 font-semibold transition hover:bg-white/20"
-        disabled={createPost.isPending}
-      >
+        disabled={createPost.isPending}>
         {createPost.isPending ? "Submitting..." : "Submit"}
       </button>
     </form>

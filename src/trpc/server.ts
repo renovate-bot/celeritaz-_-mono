@@ -1,7 +1,7 @@
 import "server-only";
 
-import { headers } from "next/headers";
 import { cache } from "react";
+import { headers } from "next/headers";
 
 import { createCaller } from "~/server/api/root";
 import { createTRPCContext } from "~/server/api/trpc";
@@ -15,7 +15,7 @@ const createContext = cache(() => {
   heads.set("x-trpc-source", "rsc");
 
   return createTRPCContext({
-    headers: heads,
+    headers: heads
   });
 });
 
