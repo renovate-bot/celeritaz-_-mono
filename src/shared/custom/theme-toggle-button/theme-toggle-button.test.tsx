@@ -5,6 +5,7 @@ import { useTheme } from "next-themes";
 import { describe } from "vitest";
 
 import ThemeToggleButton from "~/shared/custom/theme-toggle-button/index";
+
 import { render, userEventSetup } from "~/tests/test-utils";
 
 const ThemeToggleWithSpy = (): ReactElement => {

@@ -1,6 +1,7 @@
 import { describe } from "vitest";
 
 import PageHeading from "~/shared/custom/page-heading";
+
 import { render, screen } from "~/tests/test-utils";
 
 describe("Page Heading", () => {
