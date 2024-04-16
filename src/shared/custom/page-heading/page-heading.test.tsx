@@ -1,4 +1,4 @@
-import { describe } from "vitest";
+import { describe, expect } from "vitest";
 
 import PageHeading from "~/shared/custom/page-heading";
 

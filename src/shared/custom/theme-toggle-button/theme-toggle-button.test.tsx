@@ -2,7 +2,7 @@ import { type ReactElement } from "react";
 
 import { screen } from "@testing-library/react";
 import { useTheme } from "next-themes";
-import { describe } from "vitest";
+import { describe, expect } from "vitest";
 
 import ThemeToggleButton from "~/shared/custom/theme-toggle-button/index";
 
