@@ -9,18 +9,15 @@ export function CreatePost() {
   const router = useRouter();
   const [name, setName] = useState("");
 
-  const createPost = api.post.create.useMutation({
-    onSuccess: () => {
-      router.refresh();
-      setName("");
-    }
-  });
+  const createPost = {
+    isPending: true
+  };
 
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        createPost.mutate({ name });
+        // createPost.mutate({ name });
       }}
       className="flex flex-col gap-2">
       <input
