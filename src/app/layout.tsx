@@ -3,6 +3,7 @@ import "~/styles/globals.css";
 import { type ReactElement } from "react";
 import { type Metadata } from "next";
 
+import { ClerkLoaded, ClerkLoading, ClerkProvider } from "@clerk/nextjs";
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
 
@@ -33,7 +34,12 @@ export default function RootLayout({ children }: { children: ReactElement }): Re
             defaultTheme={"system"}
             enableSystem
             disableTransitionOnChange>
-                {children}
+            <ClerkProvider>
+              <ClerkLoading>
+                <LoadingPage title={"Loading..."} />
+              </ClerkLoading>
+              <ClerkLoaded>{children}</ClerkLoaded>
+            </ClerkProvider>
             <TailwindIndicator />
           </ThemeProvider>
         </TRPCReactProvider>

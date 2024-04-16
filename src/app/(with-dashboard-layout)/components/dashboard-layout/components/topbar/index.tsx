@@ -1,3 +1,4 @@
+import { SignedIn, UserButton } from "@clerk/nextjs";
 import { HamburgerMenuIcon } from "@radix-ui/react-icons";
 
 import ThemeToggleButton from "~/shared/custom/theme-toggle-button";
@@ -24,6 +25,9 @@ const TopBar = () => {
           <nav className="flex items-center gap-4">
             <ThemeToggleButton />
           </nav>
+          <SignedIn>
+            <UserButton afterSignOutUrl={"/sign-in"} />
+          </SignedIn>
         </div>
       </div>
     </header>
