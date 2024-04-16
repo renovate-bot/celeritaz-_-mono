@@ -23,27 +23,27 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactElement }): ReactElement {
   return (
-    <html
-      lang="en"
-      className={cn(GeistSans.variable, GeistMono.variable)}
-      suppressHydrationWarning={true}>
-      <body className={cn("bg-background font-sans")}>
-        <TRPCReactProvider>
-          <ThemeProvider
-            attribute={"class"}
-            defaultTheme={"system"}
-            enableSystem
-            disableTransitionOnChange>
-            <ClerkProvider>
+    <ClerkProvider>
+      <html
+        lang="en"
+        className={cn(GeistSans.variable, GeistMono.variable)}
+        suppressHydrationWarning={true}>
+        <body className={cn("bg-background font-sans")}>
+          <TRPCReactProvider>
+            <ThemeProvider
+              attribute={"class"}
+              defaultTheme={"system"}
+              enableSystem
+              disableTransitionOnChange>
               <ClerkLoading>
                 <LoadingPage title={"Loading..."} />
               </ClerkLoading>
               <ClerkLoaded>{children}</ClerkLoaded>
-            </ClerkProvider>
-            <TailwindIndicator />
-          </ThemeProvider>
-        </TRPCReactProvider>
-      </body>
-    </html>
+              <TailwindIndicator />
+            </ThemeProvider>
+          </TRPCReactProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
