@@ -15,7 +15,7 @@ const Custom404: React.FC = () => {
         <p className="text-l mt-4 text-muted-foreground">
           The page you are looking for does not exist.
         </p>
-        <Link href={"/dashboard"}>
+        <Link href={"/profile"}>
           <Button className="mt-5">
             <Home className="mr-2 h-4 w-4" />
             Go Home

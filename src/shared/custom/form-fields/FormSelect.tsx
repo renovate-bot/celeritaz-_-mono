@@ -1,7 +1,5 @@
 import React from "react";
 
-import { ChevronDown } from "lucide-react";
-
 import { Button } from "~/shared/shadcn/ui/button";
 import {
   FormControl,
@@ -47,7 +45,6 @@ interface FormSelectProps<T extends FieldValues> {
   openSelect?: boolean;
   setOpenSelect?: React.Dispatch<React.SetStateAction<boolean>>;
   showRequiredMessage?: boolean;
-  showDropDownIcon?: boolean;
   labelClassName?: string;
   optionClassName?: string;
 }
@@ -70,7 +67,6 @@ const FormSelect = <T extends FieldValues>({
   openSelect,
   setOpenSelect,
   showRequiredMessage = true,
-  showDropDownIcon = true,
   labelClassName,
   optionClassName,
 }: FormSelectProps<T>) => {
@@ -98,14 +94,13 @@ const FormSelect = <T extends FieldValues>({
               defaultValue={defaultValue}
             >
               <FormControl>
-                <SelectTrigger className={cn(selectClassName)}>
+                <SelectTrigger className={cn("w-full", selectClassName)}>
                   <div className={cn("flex flex-row items-center gap-2")}>
                     <SelectValue
                       data-testid={testId}
                       placeholder={placeholder ?? "Select"}
                     />
                   </div>
-                  {showDropDownIcon && <ChevronDown className="h-3 w-4" />}
                 </SelectTrigger>
               </FormControl>
               <SelectContent>

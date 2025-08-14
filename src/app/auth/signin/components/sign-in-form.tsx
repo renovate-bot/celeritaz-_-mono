@@ -46,24 +46,6 @@ type FormData = z.infer<typeof loginSchema>;
 export default function PatientSignInForm() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl");
-  //   const generateOtpMutation = api.auth.sendPatientOtp.useMutation({
-  //     onSuccess: () => {
-  //       toast.success("OTP sent successfully", {
-  //         description: "Please check your phone for the OTP",
-  //       });
-  //       setOpenOTP(true);
-  //     }
-  //   });
-  //   const resendOtpMutation = api.auth.resendPatientOtp.useMutation({
-  //     onSuccess: () => {
-  //       toast({
-  //         title: "OTP resent successfully",
-  //         description: "Please check your phone for the OTP",
-  //         duration: 3000
-  //       });
-  //     }
-  //   });
-
   const [loading, setIsLoading] = useState(false);
   const [openOTP, setOpenOTP] = useState(false);
   const [resendOtp, setResendOtp] = useState(true);
@@ -82,19 +64,6 @@ export default function PatientSignInForm() {
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     setIsLoading(true);
     try {
-      //   const signInResponse = await signIn("patient-credentials", {
-      //     phoneNumber: data.phoneNumber,
-      //     otp: data.otp,
-      //     redirect: false
-      //   });
-
-      //   if (signInResponse?.ok) {
-      //     router.push(callbackUrl ?? "/profile");
-      //   } else {
-      //     toast.error("Invalid OTP", {
-      //       description: "Please check your phone number and try again.",
-      //     });
-      //   }
       setIsLoading(false);
     } catch (error: unknown) {
       console.log(error);
@@ -104,7 +73,6 @@ export default function PatientSignInForm() {
 
   const handleResendOtp = async () => {
     try {
-      //   await resendOtpMutation.mutateAsync({ phone: phoneNumberWatch });
       setResendOtp(true);
     } catch (error: unknown) {
       console.log(error);
