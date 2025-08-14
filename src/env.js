@@ -8,9 +8,15 @@ export const env = createEnv({
    */
   server: {
     DATABASE_URL: z.string().url(),
+    C_AWS_REGION: z.string(),
+    C_AWS_ACCESS_KEY_ID: z.string(),
+    C_AWS_SECRET_ACCESS_KEY: z.string(),
+    C_AWS_BUCKET_NAME: z.string(),
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
+    BETTER_AUTH_SECRET: z.string(),
+    BETTER_AUTH_URL: z.string()
   },
 
   /**
@@ -29,6 +35,12 @@ export const env = createEnv({
   runtimeEnv: {
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
+    C_AWS_REGION: process.env.C_AWS_REGION,
+    C_AWS_ACCESS_KEY_ID: process.env.C_AWS_ACCESS_KEY_ID,
+    C_AWS_SECRET_ACCESS_KEY: process.env.C_AWS_SECRET_ACCESS_KEY,
+    C_AWS_BUCKET_NAME: process.env.C_AWS_BUCKET_NAME,
+    BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
+    BETTER_AUTH_URL: process.env.BETTER_AUTH_URL
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**

@@ -6,6 +6,7 @@
   "scripts": {
     "build": "next build",
     "check": "next lint && tsc --noEmit",
+    "ui:add": "pnpm dlx shadcn@latest add",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
@@ -150,6 +151,7 @@
     "tailwindcss": "^4.1.11",
     "tsx": "^4.20.4",
     "turbo": "^2.5.5",
+    "tw-animate-css": "^1.3.6",
     "typescript": "^5.9.2",
     "typescript-eslint": "^8.27.0",
     "vite-tsconfig-paths": "^5.1.4",
