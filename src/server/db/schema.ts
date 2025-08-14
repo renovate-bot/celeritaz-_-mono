@@ -3,6 +3,7 @@
 
 import { sql } from "drizzle-orm";
 import { index, pgTableCreator } from "drizzle-orm/pg-core";
+export * from "~/server/db/schema/auth-schema";
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
