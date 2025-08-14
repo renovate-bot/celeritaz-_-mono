@@ -5,7 +5,13 @@ import Link from "next/link";
 
 import { HeartPulse } from "lucide-react";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/shared/shadcn/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "~/shared/shadcn/ui/card";
 import { Skeleton } from "~/shared/shadcn/ui/skeleton";
 
 import PatientSignUpForm from "./components/sign-up-form";
@@ -33,7 +39,7 @@ export default function SignUp() {
       <Card className="w-full max-w-lg">
         <CardHeader>
           <div className="flex items-center justify-center gap-2">
-            <HeartPulse className="h-8 w-8 text-primary" />
+            <HeartPulse className="text-primary h-8 w-8" />
             <h1 className="text-2xl font-bold sm:text-3xl">
               Celeri<span className="text-primary">Health</span>
             </h1>
@@ -51,7 +57,7 @@ export default function SignUp() {
           </Suspense>
           <div className="mt-4 text-center text-xs sm:text-sm">
             Already have an account?{" "}
-            <Link href="/auth/patient/signin" className="text-primary hover:underline">
+            <Link href="/auth/signin" className="text-primary hover:underline">
               Sign in
             </Link>
           </div>

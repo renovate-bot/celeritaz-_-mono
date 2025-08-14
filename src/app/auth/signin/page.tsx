@@ -73,10 +73,7 @@ export default function SignInPage() {
           </Suspense>
           <div className="mt-4 flex items-center justify-center gap-1 text-sm">
             Don&apos;t have an account?
-            <Link
-              href="/auth/patient/signup"
-              className="text-primary hover:underline"
-            >
+            <Link href="/auth/signup" className="text-primary hover:underline">
               Register
             </Link>
           </div>
