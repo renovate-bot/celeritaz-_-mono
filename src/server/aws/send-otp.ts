@@ -1,21 +1,26 @@
-import AWS from "aws-sdk";
+import { PublishCommand, SNS } from "@aws-sdk/client-sns";
 
-AWS.config.update({
+// JS SDK v3 does not support global configuration.
+// Codemod has attempted to pass values to each service client in this file.
+// You may need to update clients outside of this file, if they use global config.
+
+const sns = new SNS({
   region: process.env.C_AWS_REGION,
-  accessKeyId: process.env.AWS_SNS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SNS_SECRET_ACCESS_KEY,
+  credentials: {
+    accessKeyId: process.env.AWS_SNS_ACCESS_KEY_ID!,
+    secretAccessKey: process.env.AWS_SNS_SECRET_ACCESS_KEY!
+  }
 });
 
-const sns = new AWS.SNS();
-
-export async function sendOTP(phoneNumber: string, otp: string) {
+export async function sendSnsOTP(phoneNumber: string, otp: string) {
   const params = {
     Message: `Your OTP is: ${otp}. The OTP will expire in 10 minutes. - Celeritaz Health`,
-    PhoneNumber: phoneNumber,
+    PhoneNumber: phoneNumber
   };
 
   try {
-    await sns.publish(params).promise();
+    const command = new PublishCommand(params);
+    await sns.send(command);
     console.log(`OTP sent to ${phoneNumber}: ${otp}`);
     return otp;
   } catch (err) {

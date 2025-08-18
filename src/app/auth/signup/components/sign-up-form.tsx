@@ -5,12 +5,10 @@ import { useRouter } from "next/navigation";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
-import { useSession } from "~/lib/auth-client";
+import { authClient, useSession } from "~/lib/auth-client";
 import { useForm } from "react-hook-form";
 import { isValidPhoneNumber } from "react-phone-number-input";
 import { z } from "zod";
-
-import { api } from "~/trpc/react";
 
 import FormDatePicker from "~/shared/custom/form-fields/FormDatePicker";
 import FormInput from "~/shared/custom/form-fields/FormInput";
@@ -67,72 +65,83 @@ export default function PatientSignUpForm() {
   const [countdown, setCountdown] = useState(0); // State for loading
   const phoneNumberWatch = formMethods.watch("phone");
 
-  //   const signUpMutation = api.auth.signupPatient.useMutation();
-  //   const generateOtpMutation = api.auth.sendPatientOtp.useMutation({
-  //     onSuccess: () => {
-  //       toast({
-  //         title: "OTP sent successfully",
-  //         description: "Please check your phone for the OTP",
-  //         duration: 3000,
-  //         className: "text-xs sm:text-sm"
-  //       });
-  //       setOpenOTP(true);
-  //     }
-  //   });
-  //   const resendOtpMutation = api.auth.resendPatientOtp.useMutation({
-  //     onSuccess: () => {
-  //       toast({
-  //         title: "OTP resent successfully",
-  //         description: "Please check your phone for the OTP",
-  //         duration: 3000,
-  //         className: "text-xs sm:text-sm"
-  //       });
-  //     }
-  //   });
+  const handleGenerateOTP = async () => {
+    setLoading(true);
+    await authClient.phoneNumber.sendOtp(
+      {
+        phoneNumber: phoneNumberWatch,
+      },
+      {
+        onSuccess: () => {
+          toast.success("OTP sent successfully", {
+            description: "Please check your phone for the OTP",
+          });
+          setOpenOTP(true);
+        },
+        onError: () => {
+          toast.error("Failed to send OTP", {
+            description: "User does not exist with this phone number",
+            duration: 5000,
+          });
+        },
+      },
+    );
+    setLoading(false);
+  };
 
-  //   const handleResendOtp = async () => {
-  //     try {
-  //       await resendOtpMutation.mutateAsync({ phone: phoneNumberWatch });
-  //       setResendOtp(true);
-  //     } catch (error: unknown) {
-  //       console.log(error);
-  //     }
-  //   };
+  const handleResendOtp = async () => {
+    setResendOtp(true);
+    await authClient.phoneNumber.sendOtp(
+      {
+        phoneNumber: phoneNumberWatch,
+      },
+      {
+        onSuccess: () => {
+          toast.success("OTP sent successfully", {
+            description: "Please check your phone for the OTP",
+          });
+          setOpenOTP(true);
+        },
+        onError: () => {
+          toast.error("Failed to send OTP", {
+            description: "User does not exist with this phone number",
+            duration: 5000,
+          });
+        },
+      },
+    );
+  };
 
   const handleSubmit: SubmitHandler<FormData> = async (data) => {
     setLoading(true);
-    try {
-      //   await signUpMutation.mutateAsync(data, {
-      //     onSuccess: () => {
-      //       toast.success("Account created successfully!");
-      //     //   signIn("patient-credentials", {
-      //     //     phoneNumber: data.phone,
-      //     //     otp: data.otp,
-      //     //     redirect: false,
-      //     //     callbackUrl: "/profile",
-      //     //   })
-      //     //     .then(() => {
-      //     //       void router.push("/profile");
-      //     //     })
-      //     //     .catch(() => null);
-      //     },
-      //     onError: (error) => {
-      //       console.log(error);
-      //       toast({
-      //         title: "Account creation failed",
-      //         description:
-      //           error.message ??
-      //           "We couldn't create your account at this time. Please check your information and try again",
-      //         variant: "destructive",
-      //         className: "text-xs sm:text-sm",
-      //       });
-      //     },
-      //   });
-    } catch (error: unknown) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
+    await authClient.phoneNumber.verify(
+      {
+        phoneNumber: data.phone,
+        code: data.otp,
+      },
+      {
+        onSuccess: async () => {
+          toast.success("OTP verified successfully", {
+            description: "Account created successfully",
+          });
+
+          await authClient.signUp.email({
+            email: data.email ?? data.phone,
+            password: data.otp,
+            name: `${data.firstName} ${data.lastName}`,
+            phoneNumber: data.phone,
+            callbackURL: "/profile",
+          });
+        },
+        onError: () => {
+          toast.error("Failed to verify OTP", {
+            description: "Please try again",
+            duration: 5000,
+            className: "bg-destructive",
+          });
+        },
+      },
+    );
   };
 
   useEffect(() => {
@@ -250,6 +259,7 @@ export default function PatientSignUpForm() {
                 "w-full text-xs sm:text-sm",
                 !phoneNumberWatch && "hidden",
               )}
+              onClick={handleGenerateOTP}
             >
               Generate OTP
             </Button>
@@ -259,7 +269,7 @@ export default function PatientSignUpForm() {
               <Button
                 variant="outline"
                 type="button"
-                onClick={() => setResendOtp(true)}
+                onClick={handleResendOtp}
                 disabled={resendOtp}
                 className={cn(
                   "w-full text-xs sm:text-sm",

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
@@ -43,14 +42,11 @@ const loginSchema = z.object({
 type FormData = z.infer<typeof loginSchema>;
 
 export default function PatientSignInForm() {
-  const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl");
   const [loading, setIsLoading] = useState(false);
   const [openOTP, setOpenOTP] = useState(false);
   const [resendOtp, setResendOtp] = useState(true);
   const [countdown, setCountdown] = useState(0);
 
-  const router = useRouter();
   const formMethods = useForm<FormData>({
     mode: "onChange",
     resolver: zodResolver(loginSchema),
@@ -62,47 +58,79 @@ export default function PatientSignInForm() {
 
   const handleGenerateOTP = async () => {
     setIsLoading(true);
-    try {
-      await authClient.phoneNumber.sendOtp({
+    await authClient.phoneNumber.sendOtp(
+      {
         phoneNumber: phoneNumberWatch,
-      });
-      toast.success("OTP sent successfully", {
-        description: "Please check your phone for the OTP",
-      });
-      setIsLoading(false);
-      setOpenOTP(true);
-    } catch (error: unknown) {
-      toast.error("Failed to send OTP", {
-        description: error instanceof Error ? error.message : "Unknown error",
-        duration: 5000,
-      });
-    }
+      },
+      {
+        onSuccess: () => {
+          toast.success("OTP sent successfully", {
+            description: "Please check your phone for the OTP",
+          });
+          setOpenOTP(true);
+        },
+        onError: () => {
+          toast.error("Failed to send OTP", {
+            description: "User does not exist with this phone number",
+            duration: 5000,
+          });
+        },
+      },
+    );
+    setIsLoading(false);
   };
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
-    setIsLoading(true);
-    try {
-      await authClient.phoneNumber.verify({
+    setIsLoading(true); 
+    await authClient.phoneNumber.verify(
+      {
         phoneNumber: data.phoneNumber,
         code: data.otp,
-      });
-      toast.success("OTP verified successfully", {
-        description: "You are logged in",
-      });
-      router.push(callbackUrl ?? "/profile");
-      setIsLoading(false);
-    } catch (error: unknown) {
-      console.log(error);
-      setIsLoading(false);
-    }
+      },
+      {
+        onSuccess: async () => {
+          toast.success("OTP verified successfully", {
+            description: "You are logged in",
+          });
+
+          await authClient.signIn.phoneNumber({
+            phoneNumber: data.phoneNumber,
+            password: data.otp,
+          });
+        },
+        onError: () => {
+          toast.error("Failed to verify OTP", {
+            description: "Please try again",
+            duration: 5000,
+            className: "bg-destructive",
+          });
+        },
+      },
+    );
+    setIsLoading(false);
   };
 
   const handleResendOtp = async () => {
-    try {
-      setResendOtp(true);
-    } catch (error: unknown) {
-      console.log(error);
-    }
+    setResendOtp(true);
+    await authClient.phoneNumber.sendOtp(
+      {
+        phoneNumber: phoneNumberWatch,
+      },
+      {
+        onSuccess: () => {
+          toast.success("OTP sent successfully", {
+            description: "Please check your phone for the OTP",
+          });
+          setOpenOTP(true);
+        },
+        onError: () => {
+          toast.error("Failed to send OTP", {
+            description: "User does not exist with this phone number",
+            duration: 5000,
+          });
+        },
+      },
+    );
   };
 
   useEffect(() => {
