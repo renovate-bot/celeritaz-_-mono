@@ -307,3 +307,9 @@ export const remarks = pgTable("remarks", {
     .notNull(),
   remarks: text("remarks"),
 });
+
+export const s3Test = pgTable("s3_test", {
+  id: text("id").primaryKey().notNull(),
+  key: text("key").notNull(),
+  createdAt: timestamp("created_at").defaultNow()
+});

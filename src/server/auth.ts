@@ -4,14 +4,23 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { phoneNumber } from "better-auth/plugins";
 import { eq } from "drizzle-orm";
 
+import { generateOTP } from "~/lib/utils";
 import { sendSnsOTP } from "~/server/aws/send-otp";
 import { patient } from "~/server/db/schema";
 
 import { db } from "../server/db";
 
-import { generateOTP } from "./utils";
-
 export const auth = betterAuth({
+  user: {
+    fields: {
+      id: "id",
+      name: "name",
+      email: "email",
+      image: "image",
+      phoneNumber: "phone_number",
+      phoneNumberVerified: "phone_number_verified"
+    }
+  },
   database: drizzleAdapter(db, { provider: "pg" }),
   session: {
     expiresIn: 60 * 60 * 24

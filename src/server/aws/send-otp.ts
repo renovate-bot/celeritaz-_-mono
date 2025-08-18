@@ -1,14 +1,16 @@
 import { PublishCommand, SNS } from "@aws-sdk/client-sns";
 
+import { env } from "~/env.js";
+
 // JS SDK v3 does not support global configuration.
 // Codemod has attempted to pass values to each service client in this file.
 // You may need to update clients outside of this file, if they use global config.
 
 const sns = new SNS({
-  region: process.env.C_AWS_REGION,
+  region: env.C_AWS_REGION,
   credentials: {
-    accessKeyId: process.env.AWS_SNS_ACCESS_KEY_ID!,
-    secretAccessKey: process.env.AWS_SNS_SECRET_ACCESS_KEY!
+    accessKeyId: env.C_AWS_ACCESS_KEY_ID,
+    secretAccessKey: env.C_AWS_SECRET_ACCESS_KEY
   }
 });
 

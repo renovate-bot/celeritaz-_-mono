@@ -12,10 +12,10 @@ const LoadingPage = ({
   className?: string;
 }) => {
   return (
-    <div className={cn("flex min-h-screen flex-col items-center justify-center", className)}>
+    <div className={cn("flex h-full sm:min-h-screen flex-col items-center justify-center", className)}>
       <div className={"flex items-center justify-center gap-2 lg:justify-start"}>
-        <HeartPulse className="h-8 w-8 animate-pulse text-primary" />
-        <h1 className="animate-pulse text-3xl font-bold sm:text-4xl">
+        <HeartPulse className="h-6 w-6 sm:h-8 sm:w-8 animate-pulse text-primary" />
+        <h1 className="animate-pulse text-xl font-bold sm:text-4xl">
           Celeri<span className={"text-primary"}>Health</span>
         </h1>
       </div>

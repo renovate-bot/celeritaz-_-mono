@@ -16,7 +16,7 @@ import { useSession } from "~/lib/auth-client";
 
 const Profile = () => {
   const { data: session } = useSession();
-  const patientId = session?.user?.id;
+  const patientId = "pat_KgUaEk8DWXHeS0";
 
   const patient = api.patient.getPatientById.useQuery(
     {
@@ -33,8 +33,7 @@ const Profile = () => {
   return (
     <div className="grid h-1/3 w-full grid-cols-1 gap-5 p-4 md:grid-cols-5 md:p-8">
       <div>
-        {/* <ProfileCard patientId={patientId ?? ""} imgUrl={patient.data?.imgUrl ?? ""} /> */}
-        <ProfileCard />
+        <ProfileCard patientId={patientId ?? ""} imgUrl={patient.data?.imgUrl} />
       </div>
       <div className="md:col-span-2">{/* <RecentReportsTable /> */}</div>
       <div className="md:col-span-2">{/* <AppointmentsTable /> */}</div>
