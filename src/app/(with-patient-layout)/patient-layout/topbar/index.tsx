@@ -17,15 +17,16 @@ import { signOut, useSession } from "~/lib/auth-client";
 
 import MobileSideBar from "./components/MobileSideBar";
 import UpdateProfilePhoto from "./components/UpdateProfilePhoto";
+import { api } from "~/trpc/react";
 
 const TopBar = () => {
   const router = useRouter();
   const { data: session } = useSession();
   const { setTheme, theme } = useTheme();
   const patientId = session?.user.id;
+  const { data: profilePhoto } = api.patient.getProfilePhoto.useQuery({ id: "pat_KgUaEk8DWXHeS0" });
   return (
     <header
-      data-testid={"topbar"}
       className="bg-background sticky top-0 z-40 w-full border-b shadow-sm">
       <div className="flex h-16 items-center justify-between gap-7 px-4 sm:space-x-0 sm:px-[1rem]">
         <div className="block xl:hidden">
@@ -36,12 +37,12 @@ const TopBar = () => {
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <div className="h-6 w-6 overflow-hidden rounded-full">
+            <div className="h-7 w-7 overflow-hidden rounded-full border">
               <Image
-                src={"/placeholder-user.jpg"}
+                src={profilePhoto ?? "/placeholder-user.jpg"}
                 alt="patient img"
-                width={25}
-                height={25}
+                width={27}
+                height={27}
                 className="object-cover"
               />
             </div>

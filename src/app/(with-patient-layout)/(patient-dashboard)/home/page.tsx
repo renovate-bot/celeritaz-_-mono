@@ -33,7 +33,6 @@ const Home = () => {
   );
 
   if (patient.isLoading) return <LoadingPage />;
-  if (patient.error) return <div>Error: {patient.error.message}</div>;
 
   const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
@@ -43,7 +42,7 @@ const Home = () => {
     <div className="flex h-full w-full flex-col gap-4 p-4">
       <Input
         type="text"
-        placeholder="Search for doctors, labs, insurance, etc."
+        placeholder="Search for orders, diagnostics, others..."
         className="h-8 w-full text-xs sm:text-sm"
         value={query}
         onChange={handleSearchInputChange}
@@ -52,9 +51,9 @@ const Home = () => {
         <HomeOptions title="Doctor Booking" subTitle="Pre Book" icon={<Stethoscope size={18} />} />
         <HomeOptions title="Lab/Blood Test" subTitle="AT HOME" icon={<Droplets size={18} />} />
         <HomeOptions title="Pharmacy" subTitle="18% OFF" icon={<Pill size={18} />} />
-        <HomeOptions title="Pharmacy" subTitle="18% OFF" icon={<Pill size={18} />} />
-        <HomeOptions title="Pharmacy" subTitle="18% OFF" icon={<Pill size={18} />} />
-        <HomeOptions title="Pharmacy" subTitle="18% OFF" icon={<Pill size={18} />} />
+        <HomeOptions title="View Orders" subTitle="18% OFF" icon={<Pill size={18} />} />
+        <HomeOptions title="Upload Docs" subTitle="Previous Docs" icon={<Pill size={18} />} />
+        <HomeOptions title="Update Documents" subTitle="18% OFF" icon={<Pill size={18} />} />
       </div>
     </div>
   );

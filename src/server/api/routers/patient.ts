@@ -1,6 +1,9 @@
+import { GetObjectCommand } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { eq } from "drizzle-orm";
 import z from "zod";
 
+import { env } from "~/env";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import {
   address,
@@ -11,6 +14,8 @@ import {
   referralDetails,
   remarks
 } from "~/server/db/schema";
+
+const DEFAULT_EXPIRES_IN = 21600; // 6 hours
 
 export const patientRouter = createTRPCRouter({
   getPatientById: publicProcedure
@@ -73,6 +78,32 @@ export const patientRouter = createTRPCRouter({
         };
       } catch (err) {
         console.log(err);
+      }
+    }),
+  getProfilePhoto: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ input, ctx }) => {
+      try{
+        const { id } = input;
+        const { s3 } = ctx;
+        const profilePhoto = await ctx.db.query.patient.findFirst({
+          where: eq(patient.patientId, id)
+        });
+  
+        if (!profilePhoto?.imgUrl) {
+          return "/placeholder-user.jpg";
+        }
+  
+        const command = new GetObjectCommand({
+          Bucket: env.C_AWS_BUCKET_NAME,
+          Key: profilePhoto?.imgUrl
+        });
+  
+        const url = await getSignedUrl(s3, command, { expiresIn: DEFAULT_EXPIRES_IN });
+        return url;
+      } catch (err) {
+        console.log(err);
+        return "/placeholder-user.jpg";
       }
     }),
   updateProfilePhoto: publicProcedure
