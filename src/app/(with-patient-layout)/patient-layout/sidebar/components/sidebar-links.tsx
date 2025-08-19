@@ -19,8 +19,8 @@ export type SidebarLinkType = Record<
 
 export const SIDEBAR_LINKS: SidebarLinkType = {
   home: {
-    name: "My Profile",
-    href: "/profile",
+    name: "Home",
+    href: "/home",
     icon: <CircleUser />,
   },
   //   doctors: {
