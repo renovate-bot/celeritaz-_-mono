@@ -72,7 +72,7 @@ const FormInput = <T extends FieldValues>({
           <FormItem className={cn(className)}>
             <FormLabel className={cn(labelClassName)}>
               {label}
-              {required && <span className="ml-1 text-red-600">*</span>}
+              {required && <span className="sm:ml-1 text-red-600">*</span>}
             </FormLabel>
             <FormControl>
               <div className="relative">

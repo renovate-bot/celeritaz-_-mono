@@ -21,7 +21,9 @@ interface FormCheckBoxInterface<T extends FieldValues> {
   label?: string;
   className?: string;
   disable?: boolean;
+  labelClassName?: string;
   onChange?: () => void;
+  checkboxClassName?: string;
 }
 const FormCheckBox = <T extends FieldValues>({
   control,
@@ -29,6 +31,8 @@ const FormCheckBox = <T extends FieldValues>({
   label,
   className,
   disable,
+  labelClassName,
+  checkboxClassName,
   onChange,
 }: FormCheckBoxInterface<T>) => {
   return (
@@ -48,9 +52,10 @@ const FormCheckBox = <T extends FieldValues>({
                   onChange?.();
                 }}
                 disabled={disable}
+                className={checkboxClassName}
               />
             </FormControl>
-            {label && <FormLabel className="y-0 ml-2">{label}</FormLabel>}
+            {label && <FormLabel className={cn("y-0 ml-2", labelClassName)}>{label}</FormLabel>}
             <FormMessage />
           </FormItem>
         );

@@ -47,6 +47,7 @@ interface FormSelectProps<T extends FieldValues> {
   showRequiredMessage?: boolean;
   labelClassName?: string;
   optionClassName?: string;
+  triggerSize?: "sm" | "default" | "xs";
 }
 const FormSelect = <T extends FieldValues>({
   name,
@@ -69,6 +70,7 @@ const FormSelect = <T extends FieldValues>({
   showRequiredMessage = true,
   labelClassName,
   optionClassName,
+  triggerSize = "default",
 }: FormSelectProps<T>) => {
   const formContext = useFormContext();
   const { resetField } = formContext;
@@ -94,7 +96,7 @@ const FormSelect = <T extends FieldValues>({
               defaultValue={defaultValue}
             >
               <FormControl>
-                <SelectTrigger className={cn("w-full", selectClassName)}>
+                <SelectTrigger className={cn("w-full", selectClassName)} size={triggerSize}>
                   <div className={cn("flex flex-row items-center gap-2")}>
                     <SelectValue
                       data-testid={testId}
