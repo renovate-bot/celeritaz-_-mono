@@ -22,7 +22,7 @@ import {
 import { Form } from "~/shared/shadcn/ui/form";
 import { ScrollArea } from "~/shared/shadcn/ui/scroll-area";
 
-import { relations } from "~/lib/constants";
+import { FAMILY_RELATIONS } from "~/lib/constants";
 
 import type { PatientCompleteData } from "../../page";
 
@@ -112,7 +112,7 @@ const EditKit = ({ data }: { data: PatientCompleteData }) => {
                   control={form.control}
                   name="relation"
                   label="Kin Relation"
-                  selectOptions={relations.map((item) => ({
+                  selectOptions={FAMILY_RELATIONS.map((item) => ({
                     name: item,
                     value: item
                   }))}

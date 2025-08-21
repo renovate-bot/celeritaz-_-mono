@@ -7,6 +7,7 @@ import { env } from "~/env";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import {
   address,
+  emergencyContactDetails,
   employerDetails,
   kinDetails,
   patient,
@@ -67,6 +68,9 @@ export const patientRouter = createTRPCRouter({
         const remarkDetailData = await ctx.db.query.remarks.findFirst({
           where: eq(remarks.patientId, input.id)
         });
+        const emergencyDetailsData = await ctx.db.query.emergencyContactDetails.findMany({
+          where: eq(emergencyContactDetails.patientId, input.id)
+        });
         return {
           demographicDetails,
           addressDetails,
@@ -76,7 +80,8 @@ export const patientRouter = createTRPCRouter({
           payerDetailsData,
           kinAddressDetails,
           kinDetailsData,
-          remarkDetailData
+          remarkDetailData,
+          emergencyDetailsData
         };
       } catch (err) {
         console.log(err);

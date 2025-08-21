@@ -1,17 +1,5 @@
 import { relations } from "drizzle-orm";
-import {
-  boolean,
-  date,
-  decimal,
-  integer,
-  pgEnum,
-  pgTable,
-  primaryKey,
-  serial,
-  text,
-  timestamp,
-  varchar
-} from "drizzle-orm/pg-core";
+import { boolean, date, decimal, pgEnum, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 
 import { type InferResultType } from "~/server/db/types";
 
@@ -162,7 +150,7 @@ export const patient = pgTable("patient", {
   ...common_columns
 });
 
-export const patientRelations = relations(patient, ({ one }) => {
+export const patientRelations = relations(patient, ({ one, many }) => {
   return {
     currentAddress: one(address, {
       fields: [patient.addressId],
@@ -195,7 +183,8 @@ export const patientRelations = relations(patient, ({ one }) => {
     remarksDetails: one(remarks, {
       fields: [patient.patientId],
       references: [remarks.patientId]
-    })
+    }),
+    emergencyContactDetails: many(emergencyContactDetails)
   };
 });
 export type PatientDetailType = InferResultType<"patient">;
@@ -278,6 +267,28 @@ export const employerDetails = pgTable("employer", {
   employerState: text("employer_state"),
   employerCountry: text("employer_country"),
   ...common_columns
+});
+
+export const emergencyContactDetails = pgTable("emergency_contact", {
+  id: text("id").primaryKey().notNull(),
+  patientId: text("patient_id")
+    .references(() => patient.patientId)
+    .notNull(),
+  firstName: text("first_name").notNull(),
+  middleName: text("middle_name"),
+  lastName: text("last_name"),
+  mobileNumber: text("mobile_number").notNull(),
+  email: text("email"),
+  relation: text("relation").notNull(),
+  ...common_columns
+});
+export const emergencyContactRelations = relations(emergencyContactDetails, ({ one }) => {
+  return {
+    patient: one(patient, {
+      fields: [emergencyContactDetails.patientId],
+      references: [patient.patientId]
+    })
+  };
 });
 
 export const remarks = pgTable("remarks", {

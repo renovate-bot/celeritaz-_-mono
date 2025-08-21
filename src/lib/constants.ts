@@ -480,7 +480,7 @@ export const INSURANCE_COMPANIES = [
   "Zurich Insurance Group"
 ];
 
-export const relations = [
+export const FAMILY_RELATIONS = [
   "Mother",
   "Father",
   "Brother",

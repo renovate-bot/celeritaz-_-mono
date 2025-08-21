@@ -8,6 +8,7 @@ import LoadingPage from "~/shared/custom/loading-page";
 
 import { useSession } from "~/lib/auth-client";
 
+import EmergencyCard from "./components/EmergencyCard";
 import EmployerCard from "./components/EmployerCard";
 import IdentityCard from "./components/IdentityCard";
 import KinCard from "./components/KinCard";
@@ -49,6 +50,7 @@ const Profile = () => {
       <EmployerCard data={patientData} />
       <IdentityCard data={patientData} />
       <OthersCard data={patientData} />
+      <EmergencyCard data={patientData} />
     </div>
   );
 };
