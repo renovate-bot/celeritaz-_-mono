@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Pen } from "lucide-react";
@@ -9,15 +9,14 @@ import z from "zod";
 
 import { api } from "~/trpc/react";
 
+import AlertDialog from "~/shared/custom/alert-dialog.tsx";
 import FormCheckBox from "~/shared/custom/form-fields/FormCheckBox";
 import FormDatePicker from "~/shared/custom/form-fields/FormDatePicker";
 import FormInput from "~/shared/custom/form-fields/FormInput";
 import FormSelect from "~/shared/custom/form-fields/FormSelect";
 import PhoneInputField from "~/shared/custom/form-fields/PhoneInput";
-import { Button } from "~/shared/shadcn/ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogFooter,
   DialogTitle,
@@ -79,17 +78,18 @@ const formSchema = z.object({
 });
 
 const EditPersonal = ({ data }: { data: PatientCompleteData }) => {
+  const [mainDialog, setMainDialog] = useState(false);
   const form = useForm({
     resolver: zodResolver(formSchema)
   });
   const isPermanent = form.watch("samePermenantAddress");
-  console.log(JSON.stringify(form.formState.errors, null, 2));
 
   const editMutation = api.patient.editPersonalDetails.useMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success("Personal information updated successfully", {
         description: "Your personal information has been updated successfully"
       });
+      await api.useUtils().patient.getPatientCompleteDetailsById.invalidate();
     },
     onError: () => {
       toast.error("Failed to update personal information", {
@@ -136,18 +136,21 @@ const EditPersonal = ({ data }: { data: PatientCompleteData }) => {
     });
   }, [form, data]);
 
-  const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    await editMutation.mutateAsync(data);
-  };
+  const formSubmission = useCallback(async () => {
+    await form.handleSubmit(async (data: z.infer<typeof formSchema>) => {
+      await editMutation.mutateAsync(data);
+    })();
+  }, [form, editMutation]);
+
   return (
-    <Dialog>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-          <DialogTrigger asChild>
-            <Pen size={10} className="text-muted-foreground cursor-pointer duration-200" />
-          </DialogTrigger>
-          <DialogContent className="w-[270px] p-2 pr-0.5 sm:max-w-[425px]">
-            <DialogTitle className="text-primary items-start text-xs font-medium sm:text-sm">
+    <Dialog open={mainDialog} onOpenChange={setMainDialog}>
+      <DialogTrigger asChild>
+        <Pen size={10} className="text-muted-foreground cursor-pointer duration-200" />
+      </DialogTrigger>
+      <DialogContent className="w-[270px] p-2 pr-0.5 sm:w-full">
+        <Form {...form}>
+          <form className="flex flex-col gap-4">
+            <DialogTitle className="text-primary mt-3 items-start text-xs font-medium sm:text-sm">
               Edit Personal Information
             </DialogTitle>
             <ScrollArea className="h-[300px] w-full">
@@ -156,7 +159,7 @@ const EditPersonal = ({ data }: { data: PatientCompleteData }) => {
                   control={form.control}
                   className="gap-0.5 text-[9px] sm:text-sm"
                   labelClassName="text-[9px] sm:text-sm"
-                  inputClassName="text-[9px] h-7 sm:text-sm focus-visible:ring-ring/5 p-2"
+                  inputClassName="text-[9px] h-7 sm:h-auto sm:text-sm focus-visible:ring-ring/5 p-2"
                   name="firstName"
                   label="First Name"
                   placeholder="First Name"
@@ -166,7 +169,7 @@ const EditPersonal = ({ data }: { data: PatientCompleteData }) => {
                   control={form.control}
                   className="gap-0.5 text-[9px] sm:text-sm"
                   labelClassName="text-[9px] sm:text-sm"
-                  inputClassName="text-[9px] h-7 sm:text-sm focus-visible:ring-ring/5 p-2"
+                  inputClassName="text-[9px] h-7 sm:h-auto sm:text-sm focus-visible:ring-ring/5 p-2"
                   name="middleName"
                   label="Middle Name"
                   placeholder="Middle Name"
@@ -175,7 +178,7 @@ const EditPersonal = ({ data }: { data: PatientCompleteData }) => {
                   control={form.control}
                   className="gap-0.5 text-[9px] sm:text-sm"
                   labelClassName="text-[9px] sm:text-sm"
-                  inputClassName="text-[9px] h-7 sm:text-sm focus-visible:ring-ring/5 p-2"
+                  inputClassName="text-[9px] h-7 sm:h-auto sm:text-sm focus-visible:ring-ring/5 p-2"
                   name="lastName"
                   label="Last Name"
                   placeholder="Last Name"
@@ -183,7 +186,7 @@ const EditPersonal = ({ data }: { data: PatientCompleteData }) => {
                 <FormDatePicker
                   control={form.control}
                   labelClassName="text-[9px] sm:text-sm"
-                  className="h-7 px-2 text-[9px] sm:text-sm"
+                  className="h-7 px-2 text-[9px] sm:h-auto sm:text-sm"
                   label="Date of Birth"
                   name="dob"
                   required
@@ -199,8 +202,8 @@ const EditPersonal = ({ data }: { data: PatientCompleteData }) => {
                   className="gap-0.5 text-[9px] sm:text-sm"
                   labelClassName="text-[9px] sm:text-sm"
                   triggerSize="xs"
-                  selectClassName="text-[9px] h-5 sm:text-sm p-2"
-                  optionClassName="text-[9px] h-5 sm:text-sm p-2"
+                  selectClassName="text-[9px] sm:text-sm p-2"
+                  optionClassName="text-[9px] sm:text-sm p-2"
                   backToDefault={false}
                   required
                 />
@@ -221,8 +224,8 @@ const EditPersonal = ({ data }: { data: PatientCompleteData }) => {
                   className="gap-0.5 text-[9px] sm:text-sm"
                   labelClassName="text-[9px] sm:text-sm"
                   triggerSize="xs"
-                  selectClassName="text-[9px] h-5 sm:text-sm p-2"
-                  optionClassName="text-[9px] h-5 sm:text-sm p-2"
+                  selectClassName="text-[9px] sm:text-sm p-2"
+                  optionClassName="text-[9px] sm:text-sm p-2"
                   backToDefault={false}
                 />
                 <PhoneInputField
@@ -246,9 +249,8 @@ const EditPersonal = ({ data }: { data: PatientCompleteData }) => {
                   control={form.control}
                   className="gap-0.5 text-[9px] sm:text-sm"
                   labelClassName="text-[9px] sm:text-sm"
-                  inputClassName="text-[9px] h-7 sm:text-sm focus-visible:ring-ring/5 p-2"
+                  inputClassName="text-[9px] h-7 sm:h-auto sm:text-sm focus-visible:ring-ring/5 p-2"
                   name="email"
-                  type="email"
                   label="Email Address"
                   placeholder="Email Address"
                 />
@@ -256,7 +258,7 @@ const EditPersonal = ({ data }: { data: PatientCompleteData }) => {
                   control={form.control}
                   className="gap-0.5 text-[9px] sm:text-sm"
                   labelClassName="text-[9px] sm:text-sm"
-                  inputClassName="text-[9px] h-7 sm:text-sm focus-visible:ring-ring/5 p-2"
+                  inputClassName="text-[9px] h-7 sm:h-auto sm:text-sm focus-visible:ring-ring/5 p-2"
                   name="fatherName"
                   label="Father Name"
                   placeholder="Father Name"
@@ -265,7 +267,7 @@ const EditPersonal = ({ data }: { data: PatientCompleteData }) => {
                   control={form.control}
                   className="gap-0.5 text-[9px] sm:text-sm"
                   labelClassName="text-[9px] sm:text-sm"
-                  inputClassName="text-[9px] h-7 sm:text-sm focus-visible:ring-ring/5 p-2"
+                  inputClassName="text-[9px] h-7 sm:h-auto sm:text-sm focus-visible:ring-ring/5 p-2"
                   name="motherName"
                   label="Mother Name"
                   placeholder="Mother Name"
@@ -274,7 +276,7 @@ const EditPersonal = ({ data }: { data: PatientCompleteData }) => {
                   control={form.control}
                   className="gap-0.5 text-[9px] sm:text-sm"
                   labelClassName="text-[9px] sm:text-sm"
-                  inputClassName="text-[9px] h-7 sm:text-sm focus-visible:ring-ring/5 p-2"
+                  inputClassName="text-[9px] h-7 sm:h-auto sm:text-sm focus-visible:ring-ring/5 p-2"
                   name="spouseName"
                   label="Spouse Name"
                   placeholder="Spouse Name"
@@ -290,12 +292,12 @@ const EditPersonal = ({ data }: { data: PatientCompleteData }) => {
                   className="gap-0.5 text-[9px] sm:text-sm"
                   labelClassName="text-[9px] sm:text-sm"
                   triggerSize="xs"
-                  selectClassName="text-[9px] h-5 sm:text-sm p-2"
-                  optionClassName="text-[9px] h-5 sm:text-sm p-2"
+                  selectClassName="text-[9px] sm:text-sm p-2"
+                  optionClassName="text-[9px] sm:text-sm p-2"
                   backToDefault={false}
                   required
                 />
-                <p className="text-[11px] sm:text-sm">Current Address</p>
+                <p className="text-xs font-semibold sm:text-sm">Current Address</p>
                 <FormInput
                   control={form.control}
                   name="currentAddress.addressLine1"
@@ -303,7 +305,7 @@ const EditPersonal = ({ data }: { data: PatientCompleteData }) => {
                   placeholder="Address Line 1"
                   className="gap-0.5"
                   labelClassName="text-[9px] sm:text-sm"
-                  inputClassName="text-[9px] h-7 sm:text-sm focus-visible:ring-ring/5 p-2"
+                  inputClassName="text-[9px] h-7 sm:h-auto sm:text-sm focus-visible:ring-ring/5 p-2"
                   required
                 />
                 <FormInput
@@ -313,7 +315,7 @@ const EditPersonal = ({ data }: { data: PatientCompleteData }) => {
                   placeholder="Address Line 2"
                   className="gap-0.5"
                   labelClassName="text-[9px] sm:text-sm"
-                  inputClassName="text-[9px] h-7 sm:text-sm focus-visible:ring-ring/5 p-2"
+                  inputClassName="text-[9px] h-7 sm:h-auto sm:text-sm focus-visible:ring-ring/5 p-2"
                   required
                 />
                 <FormInput
@@ -323,7 +325,7 @@ const EditPersonal = ({ data }: { data: PatientCompleteData }) => {
                   placeholder="City"
                   className="gap-0.5"
                   labelClassName="text-[9px] sm:text-sm"
-                  inputClassName="text-[9px] h-7 sm:text-sm focus-visible:ring-ring/5 p-2"
+                  inputClassName="text-[9px] h-7 sm:h-auto sm:text-sm focus-visible:ring-ring/5 p-2"
                   required
                 />
                 <FormSelect
@@ -337,8 +339,8 @@ const EditPersonal = ({ data }: { data: PatientCompleteData }) => {
                   className="gap-0.5 text-[9px] sm:text-sm"
                   labelClassName="text-[9px] sm:text-sm"
                   triggerSize="xs"
-                  selectClassName="text-[9px] h-5 sm:text-sm p-2"
-                  optionClassName="text-[9px] h-5 sm:text-sm p-2"
+                  selectClassName="text-[9px] sm:text-sm p-2"
+                  optionClassName="text-[9px] sm:text-sm p-2"
                   backToDefault={false}
                 />
                 <FormSelect
@@ -352,8 +354,8 @@ const EditPersonal = ({ data }: { data: PatientCompleteData }) => {
                   className="gap-0.5 text-[9px] sm:text-sm"
                   labelClassName="text-[9px] sm:text-sm"
                   triggerSize="xs"
-                  selectClassName="text-[9px] h-5 sm:text-sm p-2"
-                  optionClassName="text-[9px] h-5 sm:text-sm p-2"
+                  selectClassName="text-[9px] sm:text-sm p-2"
+                  optionClassName="text-[9px] sm:text-sm p-2"
                   backToDefault={false}
                 />
                 <FormInput
@@ -364,7 +366,7 @@ const EditPersonal = ({ data }: { data: PatientCompleteData }) => {
                   type="number"
                   className="gap-0.5"
                   labelClassName="text-[9px] sm:text-sm"
-                  inputClassName="text-[9px] h-7 sm:text-sm focus-visible:ring-ring/5 p-2"
+                  inputClassName="text-[9px] h-7 sm:h-auto sm:text-sm focus-visible:ring-ring/5 p-2"
                   required
                 />
                 <FormCheckBox
@@ -377,7 +379,7 @@ const EditPersonal = ({ data }: { data: PatientCompleteData }) => {
                 />
                 {!isPermanent && (
                   <>
-                    <p className="text-[11px] sm:text-sm">Permanent Address</p>
+                    <p className="text-xs font-semibold sm:text-sm">Permanent Address</p>
                     <FormInput
                       control={form.control}
                       name="permanentAddress.addressLine1"
@@ -385,7 +387,7 @@ const EditPersonal = ({ data }: { data: PatientCompleteData }) => {
                       placeholder="Address Line 1"
                       className="gap-0.5"
                       labelClassName="text-[9px] sm:text-sm"
-                      inputClassName="text-[9px] h-7 sm:text-sm focus-visible:ring-ring/5 p-2"
+                      inputClassName="text-[9px] h-7 sm:h-auto sm:text-sm focus-visible:ring-ring/5 p-2"
                     />
                     <FormInput
                       control={form.control}
@@ -394,7 +396,7 @@ const EditPersonal = ({ data }: { data: PatientCompleteData }) => {
                       placeholder="Address Line 2"
                       className="gap-0.5"
                       labelClassName="text-[9px] sm:text-sm"
-                      inputClassName="text-[9px] h-7 sm:text-sm focus-visible:ring-ring/5 p-2"
+                      inputClassName="text-[9px] h-7 sm:h-auto sm:text-sm focus-visible:ring-ring/5 p-2"
                     />
                     <FormSelect
                       control={form.control}
@@ -407,8 +409,8 @@ const EditPersonal = ({ data }: { data: PatientCompleteData }) => {
                       className="gap-0.5 text-[9px] sm:text-sm"
                       labelClassName="text-[9px] sm:text-sm"
                       triggerSize="xs"
-                      selectClassName="text-[9px] h-5 sm:text-sm p-2"
-                      optionClassName="text-[9px] h-5 sm:text-sm p-2"
+                      selectClassName="text-[9px] sm:text-sm p-2"
+                      optionClassName="text-[9px] sm:text-sm p-2"
                       backToDefault={false}
                     />
                     <FormSelect
@@ -422,8 +424,8 @@ const EditPersonal = ({ data }: { data: PatientCompleteData }) => {
                       className="gap-0.5 text-[9px] sm:text-sm"
                       labelClassName="text-[9px] sm:text-sm"
                       triggerSize="xs"
-                      selectClassName="text-[9px] h-5 sm:text-sm p-2"
-                      optionClassName="text-[9px] h-5 sm:text-sm p-2"
+                      selectClassName="text-[9px] sm:text-sm p-2"
+                      optionClassName="text-[9px] sm:text-sm p-2"
                       backToDefault={false}
                     />
                     <FormInput
@@ -433,7 +435,7 @@ const EditPersonal = ({ data }: { data: PatientCompleteData }) => {
                       placeholder="City"
                       className="gap-0.5"
                       labelClassName="text-[9px] sm:text-sm"
-                      inputClassName="text-[9px] h-7 sm:text-sm focus-visible:ring-ring/5 p-2"
+                      inputClassName="text-[9px] h-7 sm:h-auto sm:text-sm focus-visible:ring-ring/5 p-2"
                     />
                     <FormInput
                       control={form.control}
@@ -443,30 +445,41 @@ const EditPersonal = ({ data }: { data: PatientCompleteData }) => {
                       type="number"
                       className="gap-0.5"
                       labelClassName="text-[9px] sm:text-sm"
-                      inputClassName="text-[9px] h-7 sm:text-sm focus-visible:ring-ring/5 p-2"
+                      inputClassName="text-[9px] h-7 sm:h-auto sm:text-sm focus-visible:ring-ring/5 p-2"
                     />
                   </>
                 )}
               </div>
             </ScrollArea>
             <DialogFooter className="flex w-full flex-row items-center justify-center gap-2 pr-1">
-              <DialogClose asChild>
-                <Button size={"xs"} variant="outline">
-                  Cancel
-                </Button>
-              </DialogClose>
-              <Button
-                size={"xs"}
-                type="submit"
-                onClick={() => form.handleSubmit(onSubmit)}
-                disabled={editMutation.isPending}
-              >
-                Update
-              </Button>
+              <AlertDialog
+                onConfirm={async () => {
+                  setMainDialog(false);
+                  form.reset();
+                }}
+                buttonName="Cancel"
+                buttonVariant="outline"
+                description="Are you sure you want to discard the changes?"
+                buttonType="reset"
+                triggerClassName="h-7 sm:h-8 rounded-md px-3 text-[10px] sm:text-sm"
+                submitButtonClassName="h-7 sm:h-8 rounded-md px-5 text-[10px] sm:text-sm"
+                cancelButtonClassName="h-7 sm:h-8 rounded-md px-5 text-[10px] sm:text-sm"
+              />
+              <AlertDialog
+                onConfirm={async () => await formSubmission()}
+                buttonName="Update"
+                buttonVariant="default"
+                description="Are you sure you want to update the changes?"
+                buttonType="submit"
+                triggerClassName="h-7 sm:h-8 rounded-md px-3 text-[10px] sm:text-sm"
+                submitButtonClassName="h-7 sm:h-8 rounded-md px-5 text-[10px] sm:text-sm"
+                cancelButtonClassName="h-7 sm:h-8 rounded-md px-5 text-[10px] sm:text-sm"
+                isLoading={editMutation.isPending}
+              />
             </DialogFooter>
-          </DialogContent>
-        </form>
-      </Form>
+          </form>
+        </Form>
+      </DialogContent>
     </Dialog>
   );
 };

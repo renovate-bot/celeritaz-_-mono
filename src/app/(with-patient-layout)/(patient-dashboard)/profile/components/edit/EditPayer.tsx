@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Check, ChevronDown, Pen } from "lucide-react";
@@ -8,7 +8,7 @@ import z from "zod";
 
 import { api } from "~/trpc/react";
 
-import FormDatePicker from "~/shared/custom/form-fields/FormDatePicker";
+import AlertDialog from "~/shared/custom/alert-dialog.tsx";
 import FormInput from "~/shared/custom/form-fields/FormInput";
 import FormSelect from "~/shared/custom/form-fields/FormSelect";
 import { Button } from "~/shared/shadcn/ui/button";
@@ -22,7 +22,6 @@ import {
 } from "~/shared/shadcn/ui/command";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogFooter,
   DialogTitle,
@@ -53,11 +52,7 @@ const formSchema = z.object({
   group: z.string().optional(),
   subGroup: z.string().optional(),
   insuranceCompany: z.string().optional(),
-  policyNumber: z.string().optional(),
-  policyLimit: z.string().optional(),
-  scheme: z.string().optional(),
-  applicationFromDate: z.coerce.date().optional(),
-  applicationToDate: z.coerce.date().optional()
+  policyNumber: z.string().optional()
 });
 
 const EditPayer = ({ data }: { data: PatientCompleteData }) => {
@@ -65,9 +60,9 @@ const EditPayer = ({ data }: { data: PatientCompleteData }) => {
     resolver: zodResolver(formSchema)
   });
   const { setValue, resetField, control } = form;
+  const [mainDialog, setMainDialog] = useState(false);
   const [comboBox1, setComboBox1] = useState(false);
   const [comboBox2, setComboBox2] = useState(false);
-  console.log(JSON.stringify(form.formState.errors, null, 2));
   const editMutation = api.patient.editPayerDetails.useMutation({
     onSuccess: () => {
       toast.success("Payer information updated successfully", {
@@ -91,27 +86,25 @@ const EditPayer = ({ data }: { data: PatientCompleteData }) => {
       group: data?.payerDetailsData?.group ?? undefined,
       subGroup: data?.payerDetailsData?.subGroup ?? undefined,
       insuranceCompany: data?.payerDetailsData?.insuranceCompany ?? undefined,
-      policyNumber: data?.payerDetailsData?.policyNumber ?? undefined,
-      policyLimit: data?.payerDetailsData?.policyLimit ?? undefined,
-      scheme: data?.payerDetailsData?.scheme ?? undefined,
-      applicationFromDate: data?.payerDetailsData?.applicationFromDate ?? undefined,
-      applicationToDate: data?.payerDetailsData?.applicationToDate ?? undefined
+      policyNumber: data?.payerDetailsData?.policyNumber ?? undefined
     });
   }, [form, data]);
 
-  const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    await editMutation.mutateAsync(data);
-  };
+  const formSubmission = useCallback(async () => {
+    await form.handleSubmit(async (data: z.infer<typeof formSchema>) => {
+      await editMutation.mutateAsync(data);
+    })();
+  }, [form, editMutation]);
 
   return (
-    <Dialog>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-          <DialogTrigger asChild>
-            <Pen size={10} className="text-muted-foreground cursor-pointer duration-200" />
-          </DialogTrigger>
-          <DialogContent className="w-[270px] p-2 pr-0.5 sm:max-w-[425px]">
-            <DialogTitle className="text-primary items-start text-xs font-medium sm:text-sm">
+    <Dialog open={mainDialog} onOpenChange={setMainDialog}>
+      <DialogTrigger asChild>
+        <Pen size={10} className="text-muted-foreground cursor-pointer duration-200" />
+      </DialogTrigger>
+      <DialogContent className="w-[270px] p-2 pr-0.5 sm:max-w-[425px]">
+        <Form {...form}>
+          <form className="flex flex-col gap-4">
+            <DialogTitle className="text-primary mt-3 items-start text-xs font-medium sm:text-sm">
               Edit Payer Information
             </DialogTitle>
             <ScrollArea className="h-[300px] w-full">
@@ -215,36 +208,6 @@ const EditPayer = ({ data }: { data: PatientCompleteData }) => {
                   optionClassName="text-[9px] h-5 sm:text-sm p-2"
                   backToDefault={false}
                 />
-                <FormInput
-                  control={control}
-                  className="gap-0.5 text-[9px] sm:text-sm"
-                  labelClassName="text-[9px] sm:text-sm"
-                  inputClassName="text-[9px] h-7 sm:text-sm focus-visible:ring-ring/5 p-2"
-                  name="type"
-                  label="Payer Type"
-                  placeholder="Payer Type"
-                  disabled
-                />
-                <FormInput
-                  control={control}
-                  className="gap-0.5 text-[9px] sm:text-sm"
-                  labelClassName="text-[9px] sm:text-sm"
-                  inputClassName="text-[9px] h-7 sm:text-sm focus-visible:ring-ring/5 p-2"
-                  name="group"
-                  label="Payer Group"
-                  placeholder="Payer Group"
-                  disabled
-                />
-                <FormInput
-                  control={control}
-                  className="gap-0.5 text-[9px] sm:text-sm"
-                  labelClassName="text-[9px] sm:text-sm"
-                  inputClassName="text-[9px] h-7 sm:text-sm focus-visible:ring-ring/5 p-2"
-                  name="subGroup"
-                  label="Payer Sub Group"
-                  placeholder="Payer Sub Group"
-                  disabled
-                />
                 <FormField
                   control={control}
                   name="insuranceCompany"
@@ -341,61 +304,40 @@ const EditPayer = ({ data }: { data: PatientCompleteData }) => {
                   labelClassName="text-[9px] sm:text-sm"
                   inputClassName="text-[9px] h-7 sm:text-sm focus-visible:ring-ring/5 p-2"
                   name="policyNumber"
-                  label="Email Address"
-                  placeholder="Email Address"
-                />
-                <FormInput
-                  control={form.control}
-                  className="gap-0.5 text-[9px] sm:text-sm"
-                  labelClassName="text-[9px] sm:text-sm"
-                  inputClassName="text-[9px] h-7 sm:text-sm focus-visible:ring-ring/5 p-2"
-                  name="policyLimit"
-                  label="Policy Limit"
-                  placeholder="Policy Limit"
-                />
-                <FormInput
-                  control={form.control}
-                  className="gap-0.5 text-[9px] sm:text-sm"
-                  labelClassName="text-[9px] sm:text-sm"
-                  inputClassName="text-[9px] h-7 sm:text-sm focus-visible:ring-ring/5 p-2"
-                  name="scheme"
-                  label="Scheme"
-                  placeholder="Scheme"
-                />
-                <FormDatePicker
-                  control={control}
-                  labelClassName="text-[9px] sm:text-sm"
-                  className="h-7 px-2 text-[9px] sm:text-sm"
-                  label="Application From Date"
-                  name="applicationFromDate"
-                />
-                <FormDatePicker
-                  control={control}
-                  labelClassName="text-[9px] sm:text-sm"
-                  className="h-7 px-2 text-[9px] sm:text-sm"
-                  label="Application To Date"
-                  name="applicationToDate"
+                  label="Policy Number"
+                  placeholder="Policy Number"
                 />
               </div>
             </ScrollArea>
             <DialogFooter className="flex w-full flex-row items-center justify-center gap-2 pr-1">
-              <DialogClose asChild>
-                <Button size={"xs"} variant="outline">
-                  Cancel
-                </Button>
-              </DialogClose>
-              <Button
-                size={"xs"}
-                type="submit"
-                onClick={() => form.handleSubmit(onSubmit)}
-                disabled={editMutation.isPending}
-              >
-                Update
-              </Button>
+              <AlertDialog
+                onConfirm={async () => {
+                  setMainDialog(false);
+                  form.reset();
+                }}
+                buttonName="Cancel"
+                buttonVariant="outline"
+                description="Are you sure you want to discard the changes?"
+                buttonType="reset"
+                triggerClassName="h-7 sm:h-8 rounded-md px-3 text-[10px] sm:text-sm"
+                submitButtonClassName="h-7 sm:h-8 rounded-md px-5 text-[10px] sm:text-sm"
+                cancelButtonClassName="h-7 sm:h-8 rounded-md px-5 text-[10px] sm:text-sm"
+              />
+              <AlertDialog
+                onConfirm={async () => await formSubmission()}
+                buttonName="Update"
+                buttonVariant="default"
+                description="Are you sure you want to update the changes?"
+                buttonType="submit"
+                triggerClassName="h-7 sm:h-8 rounded-md px-3 text-[10px] sm:text-sm"
+                submitButtonClassName="h-7 sm:h-8 rounded-md px-5 text-[10px] sm:text-sm"
+                cancelButtonClassName="h-7 sm:h-8 rounded-md px-5 text-[10px] sm:text-sm"
+                isLoading={editMutation.isPending}
+              />
             </DialogFooter>
-          </DialogContent>
-        </form>
-      </Form>
+          </form>
+        </Form>
+      </DialogContent>
     </Dialog>
   );
 };

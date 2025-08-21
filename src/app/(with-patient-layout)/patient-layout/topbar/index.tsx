@@ -33,16 +33,16 @@ const TopBar = () => {
           <MobileSideBar />
         </div>
         <div className={"flex items-center justify-center gap-1 sm:gap-2 lg:justify-start"}>
-          <Image src={"/celeritaz-log.png"} alt="celeritaz-logo" width={80} height={80} />
+          <Image src={"/logo.svg"} alt="celeritaz-logo" width={80} height={80} />
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <div className="h-7 w-7 overflow-hidden rounded-full border">
+            <div className="h-9 w-9 overflow-hidden rounded-full border">
               <Image
                 src={profilePhoto ?? "/placeholder-user.jpg"}
                 alt="patient img"
-                width={27}
-                height={27}
+                width={35}
+                height={35}
                 className="object-cover"
               />
             </div>

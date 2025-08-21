@@ -14,7 +14,6 @@ import KinCard from "./components/KinCard";
 import OthersCard from "./components/OthersCard";
 import PayerCard from "./components/PayerCard";
 import PersonalCard from "./components/PersonalCard";
-import ReferralCard from "./components/ReferralCard";
 
 import type { inferRouterOutputs } from "@trpc/server";
 import type { AppRouter } from "~/server/api/root";
@@ -48,7 +47,6 @@ const Profile = () => {
       <PayerCard data={patientData} />
       <KinCard data={patientData} />
       <EmployerCard data={patientData} />
-      <ReferralCard data={patientData} />
       <IdentityCard data={patientData} />
       <OthersCard data={patientData} />
     </div>

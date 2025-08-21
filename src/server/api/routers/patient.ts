@@ -261,11 +261,7 @@ export const patientRouter = createTRPCRouter({
         group: z.string().optional(),
         subGroup: z.string().optional(),
         insuranceCompany: z.string().optional(),
-        policyNumber: z.string().optional(),
-        policyLimit: z.string().optional(),
-        scheme: z.string().optional(),
-        applicationFromDate: z.coerce.date().optional(),
-        applicationToDate: z.coerce.date().optional()
+        policyNumber: z.string().optional()
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -280,10 +276,6 @@ export const patientRouter = createTRPCRouter({
             subGroup: input.subGroup,
             insuranceCompany: input.insuranceCompany,
             policyNumber: input.policyNumber,
-            policyLimit: input.policyLimit,
-            scheme: input.scheme,
-            applicationFromDate: input.applicationFromDate,
-            applicationToDate: input.applicationToDate,
             updatedAt: new Date(),
             updateUserId: ctx.session?.user.id
           })
@@ -300,10 +292,6 @@ export const patientRouter = createTRPCRouter({
           subGroup: input.subGroup,
           insuranceCompany: input.insuranceCompany,
           policyNumber: input.policyNumber,
-          policyLimit: input.policyLimit,
-          scheme: input.scheme,
-          applicationFromDate: input.applicationFromDate,
-          applicationToDate: input.applicationToDate,
           createdAt: new Date(),
           createUserId: ctx.session?.user.id
         });
@@ -457,10 +445,7 @@ export const patientRouter = createTRPCRouter({
     .input(
       z.object({
         patientId: z.string(),
-        identityType: z.string().optional(),
-        identityNumber: z.string().optional(),
-        streetNumber: z.string().optional(),
-        area: z.string().optional()
+        identityType: z.string().optional()
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -468,9 +453,6 @@ export const patientRouter = createTRPCRouter({
         .update(patient)
         .set({
           identityType: input.identityType,
-          identityNumber: input.identityNumber,
-          streetNumber: input.streetNumber,
-          area: input.area,
           updatedAt: new Date(),
           updateUserId: ctx.session?.user.id
         })

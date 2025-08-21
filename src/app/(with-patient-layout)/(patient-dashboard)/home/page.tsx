@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 
-import { Droplets, Pill, Stethoscope } from "lucide-react";
+import { ClipboardList, Droplets, Pill, Stethoscope } from "lucide-react";
 
 import { api } from "~/trpc/react";
 
@@ -20,7 +21,7 @@ import { useSession } from "~/lib/auth-client";
 const Home = () => {
   const { data: session } = useSession();
   const [query, setQuery] = useState("");
-
+  const router = useRouter();
   const patientId = "pat_KgUaEk8DWXHeS0";
 
   const patient = api.patient.getPatientById.useQuery(
@@ -51,8 +52,13 @@ const Home = () => {
         <HomeOptions title="Doctor Booking" subTitle="Pre Book" icon={<Stethoscope size={18} />} />
         <HomeOptions title="Lab/Blood Test" subTitle="AT HOME" icon={<Droplets size={18} />} />
         <HomeOptions title="Pharmacy" subTitle="18% OFF" icon={<Pill size={18} />} />
-        <HomeOptions title="View Orders" subTitle="18% OFF" icon={<Pill size={18} />} />
-        <HomeOptions title="Upload Docs" subTitle="Previous Docs" icon={<Pill size={18} />} />
+        <HomeOptions title="View Orders" subTitle="18% OFF" icon={<ClipboardList size={18} />} />
+        <HomeOptions
+          title="Upload Docs"
+          subTitle="Previous Docs"
+          icon={<Pill size={18} />}
+          onClick={() => router.push("/home/upload-docs")}
+        />
         <HomeOptions title="Update Documents" subTitle="18% OFF" icon={<Pill size={18} />} />
       </div>
     </div>
@@ -64,19 +70,21 @@ export default Home;
 const HomeOptions = ({
   title,
   subTitle,
-  icon
+  icon,
+  onClick
 }: {
   title: string;
   subTitle: string;
   icon?: React.ReactNode;
+  onClick?: () => void;
 }) => {
   return (
-    <Card className="rounded-md pt-1 pb-2 gap-8 justify-between">
+    <Card className="justify-between gap-8 rounded-md pt-1 pb-2" onClick={onClick}>
       <CardHeader className="gap-0.5 px-1 py-0">
         <CardTitle className="py-0 text-xs">
           <h1>{title}</h1>
         </CardTitle>
-        <CardDescription className="pt-0 text-[10px] text-primary font-semibold uppercase">
+        <CardDescription className="text-primary pt-0 text-[10px] font-semibold uppercase">
           {subTitle}
         </CardDescription>
       </CardHeader>

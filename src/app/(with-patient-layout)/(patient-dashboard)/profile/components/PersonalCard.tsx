@@ -12,7 +12,7 @@ const PersonalCard = ({ data }: { data: PatientCompleteData }) => {
     <ProfileCards title="Personal Information" edit={<EditPersonal data={data} />}>
       <div className="flex flex-col gap-2">
         <LabelValue
-          label="Name"
+          label="Full Name"
           value={formatName(
             data?.demographicDetails?.firstName ?? "",
             data?.demographicDetails?.middleName ?? null,
@@ -32,7 +32,7 @@ const PersonalCard = ({ data }: { data: PatientCompleteData }) => {
         <LabelValue label="Mother Name" value={data?.demographicDetails?.motherName} />
         <LabelValue label="Spouse Name" value={data?.demographicDetails?.spouseName} />
         <LabelValue
-          label="Address"
+          label="Current Address"
           value={formatAddress(
             data?.addressDetails?.addressLine1,
             data?.addressDetails?.addressLine2,
