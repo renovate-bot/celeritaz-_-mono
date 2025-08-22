@@ -63,11 +63,15 @@ const EditPayer = ({ data }: { data: PatientCompleteData }) => {
   const [mainDialog, setMainDialog] = useState(false);
   const [comboBox1, setComboBox1] = useState(false);
   const [comboBox2, setComboBox2] = useState(false);
+
+  const utils = api.useUtils();
   const editMutation = api.patient.editPayerDetails.useMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success("Payer information updated successfully", {
         description: "Your payer information has been updated successfully"
       });
+      await utils.patient.getPatientCompleteDetailsById.invalidate();
+      setMainDialog(false);
     },
     onError: () => {
       toast.error("Failed to update payer information", {

@@ -41,11 +41,14 @@ const EditKit = ({ data }: { data: PatientCompleteData }) => {
   });
   const { control } = form;
   const [mainDialog, setMainDialog] = useState(false);
+  const utils = api.useUtils();
   const editMutation = api.patient.editKinDetails.useMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success("Kin information updated successfully", {
         description: "Your kin information has been updated successfully"
       });
+      await utils.patient.getPatientCompleteDetailsById.invalidate();
+      setMainDialog(false);
     },
     onError: () => {
       toast.error("Failed to update kin information", {

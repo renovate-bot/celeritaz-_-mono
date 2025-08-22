@@ -49,11 +49,14 @@ const EditEmployer = ({ data }: { data: PatientCompleteData }) => {
   });
   const { control } = form;
   const [mainDialog, setMainDialog] = useState(false);
+  const utils = api.useUtils();
   const editMutation = api.patient.editEmployerDetails.useMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success("Employer information updated successfully", {
         description: "Your employer information has been updated successfully"
       });
+      await utils.patient.getPatientCompleteDetailsById.invalidate();
+      setMainDialog(false);
     },
     onError: () => {
       toast.error("Failed to update employer information", {

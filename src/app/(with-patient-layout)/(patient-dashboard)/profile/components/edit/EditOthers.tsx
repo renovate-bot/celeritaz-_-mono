@@ -52,11 +52,14 @@ const EditOthers = ({ data }: { data: PatientCompleteData }) => {
   });
   const { control } = form;
   const [mainDialog, setMainDialog] = useState(false);
+  const utils = api.useUtils();
   const editMutation = api.patient.editOthersDetails.useMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success("Other information updated successfully", {
         description: "Your other information has been updated successfully"
       });
+      await utils.patient.getPatientCompleteDetailsById.invalidate();
+      setMainDialog(false);
     },
     onError: () => {
       toast.error("Failed to update other information", {

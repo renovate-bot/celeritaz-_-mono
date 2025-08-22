@@ -1,6 +1,6 @@
 import { GetObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { eq } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 import z from "zod";
 
 import { env } from "~/env";
@@ -495,5 +495,66 @@ export const patientRouter = createTRPCRouter({
           updateUserId: ctx.session?.user.id
         })
         .where(eq(patient.patientId, input.patientId));
+    }),
+  editEmergencyContactDetails: publicProcedure
+    .input(
+      z.object({
+        patientId: z.string(),
+        contacts: z.array(
+          z.object({
+            id: z.string().optional(),
+            firstName: z.string(),
+            middleName: z.string().optional(),
+            lastName: z.string().optional(),
+            mobileNumber: z.string(),
+            email: z.string().optional(),
+            relation: z.string()
+          })
+        ),
+        deletedContacts: z.array(z.string())
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { patientId, contacts, deletedContacts } = input;
+
+      if (deletedContacts.length > 0) {
+        await ctx.db
+          .delete(emergencyContactDetails)
+          .where(inArray(emergencyContactDetails.id, deletedContacts));
+      }
+
+      await Promise.all(
+        contacts.map(async (contact) => {
+          if (contact.id) {
+            await ctx.db
+              .update(emergencyContactDetails)
+              .set({
+                firstName: contact.firstName,
+                middleName: contact.middleName,
+                lastName: contact.lastName,
+                mobileNumber: contact.mobileNumber,
+                email: contact.email,
+                relation: contact.relation,
+                updatedAt: new Date(),
+                updateUserId: ctx.session?.user.id
+              })
+              .where(eq(emergencyContactDetails.id, contact.id));
+          } else {
+            const newId = generateIntegerUniqueId({ prefix: "emergencyContact" });
+            await ctx.db.insert(emergencyContactDetails).values({
+              id: newId,
+              patientId,
+              firstName: contact.firstName,
+              middleName: contact.middleName,
+              lastName: contact.lastName,
+              mobileNumber: contact.mobileNumber,
+              email: contact.email,
+              relation: contact.relation,
+              createdAt: new Date(),
+              createUserId: ctx.session?.user.id
+            });
+          }
+        })
+      );
     })
 });

@@ -32,11 +32,14 @@ const EditIdentity = ({ data }: { data: PatientCompleteData }) => {
     resolver: zodResolver(formSchema)
   });
   const [mainDialog, setMainDialog] = useState(false);
+  const utils = api.useUtils();
   const editMutation = api.patient.editIdentityDetails.useMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success("Identity information updated successfully", {
         description: "Your identity information has been updated successfully"
       });
+      await utils.patient.getPatientCompleteDetailsById.invalidate();
+      setMainDialog(false);
     },
     onError: () => {
       toast.error("Failed to update identity information", {

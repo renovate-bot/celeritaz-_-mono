@@ -3,7 +3,11 @@ import React, { useCallback, useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Pen } from "lucide-react";
 import { useFieldArray, useForm, useFormContext } from "react-hook-form";
+import { isValidPhoneNumber } from "react-phone-number-input";
+import { toast } from "sonner";
 import z from "zod";
+
+import { api } from "~/trpc/react";
 
 import AlertDialog from "~/shared/custom/alert-dialog.tsx";
 import FormInput from "~/shared/custom/form-fields/FormInput";
@@ -32,14 +36,17 @@ import { FAMILY_RELATIONS } from "~/lib/constants";
 import type { PatientCompleteData } from "../../page";
 
 const formSchema = z.object({
+  patientId: z.string(),
   contacts: z.array(
     z.object({
       id: z.string().optional(),
       firstName: z.string(),
       middleName: z.string().optional(),
       lastName: z.string().optional(),
-      mobileNumber: z.string(),
-      email: z.string().email().optional(),
+      mobileNumber: z.string().refine(isValidPhoneNumber, {
+        message: "Invalid mobile number"
+      }),
+      email: z.string().optional(),
       relation: z.string()
     })
   ),
@@ -51,10 +58,27 @@ const EditEmergency = ({ data }: { data: PatientCompleteData }) => {
   const form = useForm({
     resolver: zodResolver(formSchema)
   });
+  const utils = api.useUtils();
+
+  const editMutation = api.patient.editEmergencyContactDetails.useMutation({
+    onSuccess: async () => {
+      toast.success("Emergency contact information updated successfully", {
+        description: "Your emergency contact information has been updated successfully"
+      });
+      await utils.patient.getPatientCompleteDetailsById.invalidate();
+      setMainDialog(false);
+    },
+    onError: () => {
+      toast.error("Failed to update emergency contact information", {
+        description: "Please try again"
+      });
+    }
+  });
 
   useEffect(() => {
     if (data?.emergencyDetailsData && data.emergencyDetailsData.length > 0) {
       form.reset({
+        patientId: data.demographicDetails?.patientId ?? "",
         contacts: data.emergencyDetailsData.map((item) => ({
           id: item.id,
           firstName: item.firstName,
@@ -67,6 +91,7 @@ const EditEmergency = ({ data }: { data: PatientCompleteData }) => {
       });
     } else {
       form.reset({
+        patientId: data?.demographicDetails?.patientId ?? "",
         contacts: [
           {
             firstName: "",
@@ -83,9 +108,9 @@ const EditEmergency = ({ data }: { data: PatientCompleteData }) => {
 
   const formSubmission = useCallback(async () => {
     await form.handleSubmit(async (data: z.infer<typeof formSchema>) => {
-      console.log(data);
+      await editMutation.mutateAsync(data);
     })();
-  }, [form]);
+  }, [form, editMutation]);
 
   return (
     <Dialog open={mainDialog} onOpenChange={setMainDialog}>
@@ -124,7 +149,7 @@ const EditEmergency = ({ data }: { data: PatientCompleteData }) => {
                 triggerClassName="h-7 sm:h-8 rounded-md px-3 text-[10px] sm:text-sm"
                 submitButtonClassName="h-7 sm:h-8 rounded-md px-5 text-[10px] sm:text-sm"
                 cancelButtonClassName="h-7 sm:h-8 rounded-md px-5 text-[10px] sm:text-sm"
-                isLoading={true}
+                isLoading={editMutation.isPending}
               />
             </DialogFooter>
           </form>
@@ -151,7 +176,7 @@ export const ContactItem = () => {
             <Accordion type="single" collapsible className="w-full rounded-md px-1">
               <AccordionItem value="item-1" className="border-0">
                 <AccordionTrigger className="flex gap-1 py-2">
-                  <p className="text-primary flex-shrink-0 pb-1 text-xs font-medium">{`Contact #${index + 1}`}</p>
+                  <p className="text-primary flex-shirink-0 pb-1 text-xs font-medium">{`Contact #${index + 1}`}</p>
                 </AccordionTrigger>
                 <AccordionContent className="pb-1">
                   <div className="flex w-full flex-col items-center justify-center gap-3 p-0">
@@ -163,6 +188,7 @@ export const ContactItem = () => {
                       name={`contacts.${index}.firstName`}
                       label="First Name"
                       placeholder="Enter First Name"
+                      required
                     />
                     <FormInput
                       control={control}
@@ -214,6 +240,7 @@ export const ContactItem = () => {
                       selectClassName="text-[9px] h-5 w-full sm:text-sm p-2"
                       optionClassName="text-[9px] h-5 sm:text-sm p-2"
                       backToDefault={false}
+                      required
                     />
                     <div className="flex gap-10">
                       <Button
@@ -222,13 +249,10 @@ export const ContactItem = () => {
                         className="text-primary h-5 p-0 text-[9px] font-medium"
                         onClick={() => {
                           if (watch(`contacts.${index}.id`)) {
-                            setValue(
-                              "deletedContacts",
-                              [
-                                ...(watch("deletedContacts") as string[]),
-                                watch(`contacts.${index}.id`) as string
-                              ]
-                            );
+                            setValue("deletedContacts", [
+                              ...(watch("deletedContacts") as string[]),
+                              watch(`contacts.${index}.id`) as string
+                            ]);
                           }
                           remove(index);
                         }}

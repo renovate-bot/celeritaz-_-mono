@@ -84,12 +84,15 @@ const EditPersonal = ({ data }: { data: PatientCompleteData }) => {
   });
   const isPermanent = form.watch("samePermenantAddress");
 
+  const utils = api.useUtils();
+
   const editMutation = api.patient.editPersonalDetails.useMutation({
     onSuccess: async () => {
       toast.success("Personal information updated successfully", {
         description: "Your personal information has been updated successfully"
       });
-      await api.useUtils().patient.getPatientCompleteDetailsById.invalidate();
+      await utils.patient.getPatientCompleteDetailsById.invalidate();
+      setMainDialog(false);
     },
     onError: () => {
       toast.error("Failed to update personal information", {
