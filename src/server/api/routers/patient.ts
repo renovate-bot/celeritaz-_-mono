@@ -11,6 +11,7 @@ import {
   employerDetails,
   kinDetails,
   patient,
+  patientIdentity,
   payerDetails,
   referralDetails,
   remarks
@@ -71,6 +72,24 @@ export const patientRouter = createTRPCRouter({
         const emergencyDetailsData = await ctx.db.query.emergencyContactDetails.findMany({
           where: eq(emergencyContactDetails.patientId, input.id)
         });
+        const identityDetailsData = await ctx.db.query.patientIdentity.findMany({
+          where: eq(patientIdentity.patientId, input.id)
+        });
+
+        const identityWithUrl = await Promise.all(
+          identityDetailsData?.map(async (item) => {
+            const command = new GetObjectCommand({
+              Bucket: env.C_AWS_BUCKET_NAME,
+              Key: item.fileUrl
+            });
+
+            const url = await getSignedUrl(ctx.s3, command, { expiresIn: DEFAULT_EXPIRES_IN });
+            return {
+              ...item,
+              fileUrl: url
+            };
+          })
+        );
         return {
           demographicDetails,
           addressDetails,
@@ -81,7 +100,8 @@ export const patientRouter = createTRPCRouter({
           kinAddressDetails,
           kinDetailsData,
           remarkDetailData,
-          emergencyDetailsData
+          emergencyDetailsData,
+          identityWithUrl
         };
       } catch (err) {
         console.log(err);
@@ -450,18 +470,44 @@ export const patientRouter = createTRPCRouter({
     .input(
       z.object({
         patientId: z.string(),
-        identityType: z.string().optional()
+        items: z.array(
+          z.object({
+            id: z.string().optional(),
+            type: z.string(),
+            url: z.string()
+          })
+        ),
+        deletedItems: z.array(z.string()).optional()
       })
     )
     .mutation(async ({ input, ctx }) => {
-      await ctx.db
-        .update(patient)
-        .set({
-          identityType: input.identityType,
-          updatedAt: new Date(),
-          updateUserId: ctx.session?.user.id
+      if (input.deletedItems) {
+        await ctx.db.delete(patientIdentity).where(inArray(patientIdentity.id, input.deletedItems));
+      }
+
+      await Promise.all(
+        input.items.map(async (item) => {
+          if (item.id) {
+            await ctx.db
+              .update(patientIdentity)
+              .set({
+                type: item.type,
+                fileUrl: item.url,
+                updatedAt: new Date(),
+                updateUserId: ctx.session?.user.id
+              })
+              .where(eq(patientIdentity.id, item.id));
+          } else {
+            const newId = generateIntegerUniqueId({ prefix: "identity" });
+            await ctx.db.insert(patientIdentity).values({
+              id: newId,
+              patientId: input.patientId,
+              type: item.type,
+              fileUrl: item.url
+            });
+          }
         })
-        .where(eq(patient.patientId, input.patientId));
+      );
     }),
   editOthersDetails: publicProcedure
     .input(

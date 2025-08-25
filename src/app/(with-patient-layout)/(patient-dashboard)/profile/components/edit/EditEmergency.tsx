@@ -95,10 +95,10 @@ const EditEmergency = ({ data }: { data: PatientCompleteData }) => {
         contacts: [
           {
             firstName: "",
-            lastName: "",
+            lastName: undefined,
             mobileNumber: "",
             relation: "",
-            email: ""
+            email: undefined
           }
         ],
         deletedContacts: []

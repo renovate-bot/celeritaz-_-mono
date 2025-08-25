@@ -62,10 +62,10 @@ const UpdateProfilePhoto = ({ patientId }: { patientId: string }) => {
               </Button>
               <FileUpload
                 saveFileKeysIn="avatar"
-                keypath={`patient/profile/${patientId}`}
+                keypath={`patient/${patientId}/profile`}
                 multiple={false}
                 allowedTypes={["image/jpeg", "image/jpg", "image/png"]}
-                maxFileSize={2 * 1024 * 1024}>
+                maxFileSize={10 * 1024 * 1024}>
                 <Button
                   disabled={!!form.watch("avatar")}
                   variant={"outline"}

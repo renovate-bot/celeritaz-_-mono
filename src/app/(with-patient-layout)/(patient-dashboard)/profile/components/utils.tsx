@@ -45,16 +45,22 @@ export const LabelValue = ({
 }: {
   label: string;
   value: string | null | undefined;
-  type?: "date" | "text" | "number";
+  type?: "date" | "text" | "number" | "link";
 }) => {
   return (
     <div className="grid w-full grid-cols-2 items-center">
       <div className="text-muted-foreground flex w-4/5 items-center justify-between text-[10px] font-normal">
         <p>{label}</p>:
       </div>
-      <p className="text-foreground text-[10px] capitalize">
-        {type === "date" && value ? format(value, "dd MMM yyyy") : (value ?? "--")}
-      </p>
+      {type !== "link" ? (
+        <p className="text-foreground text-[10px] capitalize">
+          {type === "date" && value ? format(value, "dd MMM yyyy") : (value ?? "--")}
+        </p>
+      ) : (
+        <a href={value ?? undefined} target="_blank" rel="noopener noreferrer" className="text-foreground text-[10px] capitalize">
+          {value ? "View Document" : "--"}
+        </a>
+      )}
     </div>
   );
 };

@@ -291,6 +291,24 @@ export const emergencyContactRelations = relations(emergencyContactDetails, ({ o
   };
 });
 
+export const patientIdentity = pgTable("patient_identity", {
+  id: text("id").primaryKey().notNull(),
+  patientId: text("patient_id")
+    .references(() => patient.patientId)
+    .notNull(),
+  type: text("type").notNull(),
+  fileUrl: text("file_url").notNull(),
+  ...common_columns
+});
+export const patientIdentityRelations = relations(patientIdentity, ({ one }) => {
+  return {
+    patient: one(patient, {
+      fields: [patientIdentity.patientId],
+      references: [patient.patientId]
+    })
+  };
+});
+
 export const remarks = pgTable("remarks", {
   id: text("id").primaryKey().notNull(),
   patientId: text("patient_id")

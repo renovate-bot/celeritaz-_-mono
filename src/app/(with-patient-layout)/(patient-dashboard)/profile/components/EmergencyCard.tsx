@@ -26,7 +26,7 @@ const EmergencyCard = ({ data }: { data: PatientCompleteData }) => {
           ))
         ) : (
           <p className="text-primary flex w-full justify-center p-5 text-[11px] font-medium">
-            No emergency contact information
+            No emergency contact information found
           </p>
         )}
       </div>

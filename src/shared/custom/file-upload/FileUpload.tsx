@@ -12,6 +12,7 @@ import { api } from "~/trpc/react";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "~/shared/shadcn/ui/form";
 import { Input } from "~/shared/shadcn/ui/input";
 
+import { cn } from "~/lib/utils";
 import { generateUniqueId } from "~/server/api/utils";
 
 type FileObj = {
@@ -52,7 +53,8 @@ export default function FileUpload({
   placeholder = "Upload File",
   enableToastOnValidationError = false, // Whether to show toast on validation error or not
   type = "input", // Type of file upload display: input or icon
-  required
+  required,
+  inputClassName
 }: {
   children?: React.ReactNode;
   saveFileKeysIn: string;
@@ -67,6 +69,7 @@ export default function FileUpload({
   enableToastOnValidationError?: boolean;
   type?: "input" | "icon";
   required?: boolean;
+  inputClassName?: string;
 }) {
   const [files, setFiles] = useState<FileList | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -193,9 +196,9 @@ export default function FileUpload({
         control={formContext.control}
         name={saveFileKeysIn}
         render={() => (
-          <FormItem>
+          <FormItem className="gap-0.5 sm:gap-1">
             {formLabel && (
-              <FormLabel>
+              <FormLabel className="text-[9px] sm:text-sm">
                 {formLabel}
                 {required && <span className="ml-1 text-red-600">*</span>}
               </FormLabel>
@@ -232,6 +235,7 @@ export default function FileUpload({
                       setFiles(files);
                     }
                   }}
+                  className={inputClassName}
                 />
               ) : (
                 <div onClick={() => fileInputRef.current?.click()}>
