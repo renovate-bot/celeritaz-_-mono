@@ -5,17 +5,18 @@ import { useRouter } from "next/navigation";
 
 import { MoveLeft } from "lucide-react";
 
-import { Button } from "~/shared/shadcn/ui/button";
+import UploadForm from "./components/UploadForm";
 
 const UploadDocs = () => {
   const router = useRouter();
 
   return (
-    <div className="bg-background shadow-sm">
-      <div className="grid grid-cols-3 items-center px-5 py-2">
-        <MoveLeft className="size-5" onClick={() => router.push("/home")} />
-        <h2 className="text-primary col-span-2 text-base font-bold">Upload Documents</h2>
+    <div className="flex flex-col gap-4">
+      <div className="bg-background flex flex-row items-center gap-16 px-4 py-1 shadow-sm">
+        <MoveLeft className="size-4" onClick={() => router.push("/home")} />
+        <h2 className="text-primary col-span-2 text-sm font-bold">Upload Documents</h2>
       </div>
+      <UploadForm />
     </div>
   );
 };

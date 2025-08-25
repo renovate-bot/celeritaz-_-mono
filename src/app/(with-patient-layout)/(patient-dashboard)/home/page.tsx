@@ -22,7 +22,7 @@ const Home = () => {
   const { data: session } = useSession();
   const [query, setQuery] = useState("");
   const router = useRouter();
-  const patientId = "pat_KgUaEk8DWXHeS0";
+  const patientId = "pat_KgUaEk8DWXHeS0"; //It shall be session.user.patientId
 
   const patient = api.patient.getPatientById.useQuery(
     {

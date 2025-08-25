@@ -191,7 +191,7 @@ export default function FileUpload({
   };
 
   return (
-    <div>
+    <div className="w-full">
       <FormField
         control={formContext.control}
         name={saveFileKeysIn}
