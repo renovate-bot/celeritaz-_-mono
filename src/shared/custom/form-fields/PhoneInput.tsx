@@ -28,6 +28,7 @@ interface InputFieldProps<T extends FieldValues> {
   rightIcon?: string;
   countryCode?: RPNInput.Country;
   labelClassName?: string;
+  phoneInputClassName?: string;
 }
 const PhoneInputField = <T extends FieldValues>({
   control,
@@ -38,7 +39,8 @@ const PhoneInputField = <T extends FieldValues>({
   className,
   required,
   countryCode,
-  labelClassName
+  labelClassName,
+  phoneInputClassName
 }: InputFieldProps<T>) => {
   return (
     <FormField
@@ -49,7 +51,7 @@ const PhoneInputField = <T extends FieldValues>({
           <FormItem className={cn(className)}>
             <FormLabel className={cn(labelClassName)}>
               {label}
-              {required && <span className="ml-1 text-red-600">*</span>}
+              {required && <span className="sm:ml-1 text-red-600">*</span>}
             </FormLabel>
             <FormControl>
               <div className="relative">
@@ -57,7 +59,7 @@ const PhoneInputField = <T extends FieldValues>({
                   countryCode={countryCode}
                   maxLength={maxLength}
                   placeholder={placeholder}
-                  className={className}
+                  className={phoneInputClassName}
                   {...field}
                 />
               </div>

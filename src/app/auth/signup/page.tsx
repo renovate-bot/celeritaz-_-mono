@@ -5,13 +5,7 @@ import Link from "next/link";
 
 import { HeartPulse } from "lucide-react";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "~/shared/shadcn/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/shared/shadcn/ui/card";
 import { Skeleton } from "~/shared/shadcn/ui/skeleton";
 
 import PatientSignUpForm from "./components/sign-up-form";

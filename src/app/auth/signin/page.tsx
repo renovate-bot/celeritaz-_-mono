@@ -50,20 +50,14 @@ export default function SignInPage() {
       </div>
       <div className="flex flex-1 items-center justify-center p-6 sm:p-12">
         <div className="w-full max-w-sm space-y-8">
-          <div
-            className={
-              "flex items-center justify-center gap-2 lg:justify-start"
-            }
-          >
+          <div className={"flex items-center justify-center gap-2 lg:justify-start"}>
             <HeartPulse className="text-primary h-8 w-8" />
             <h1 className="text-3xl font-bold duration-150 sm:text-4xl">
               Celeri<span className={"text-primary"}>Health</span>
             </h1>
           </div>
           <div className={"pt-4 text-start"}>
-            <h2 className="text-xl font-semibold sm:mt-6 sm:text-2xl">
-              Welcome Back!
-            </h2>
+            <h2 className="text-xl font-semibold sm:mt-6 sm:text-2xl">Welcome Back!</h2>
             <p className="text-muted-foreground text-sm sm:text-base">
               Please login to your celerihealth account.
             </p>

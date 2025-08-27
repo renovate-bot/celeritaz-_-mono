@@ -80,7 +80,7 @@ export default function MobileSideBar() {
         <Button
           variant={"outline"}
           size={"icon"}
-          className={"mr-2 h-6 w-6 sm:h-9 sm:w-9 xl:hidden"}
+          className={"mr-2 h-8 w-8 sm:h-9 sm:w-9 xl:hidden"}
           onClick={() => {
             setIsSheetOpen(true);
           }}

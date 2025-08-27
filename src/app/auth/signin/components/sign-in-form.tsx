@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { isValidPhoneNumber } from "react-phone-number-input";
+import { toast } from "sonner";
 import { z } from "zod";
 
 import PhoneInputField from "~/shared/custom/form-fields/PhoneInput";
@@ -16,27 +17,24 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
+  FormMessage
 } from "~/shared/shadcn/ui/form";
 import {
   InputOTP,
   InputOTPGroup,
   InputOTPSeparator,
-  InputOTPSlot,
+  InputOTPSlot
 } from "~/shared/shadcn/ui/input-otp";
-import { toast } from "sonner";
 
+import { authClient } from "~/lib/auth-client";
 import { cn } from "~/lib/utils";
 
 import type { SubmitHandler } from "react-hook-form";
-import { authClient } from "~/lib/auth-client";
 
 // Define the zod schema
 const loginSchema = z.object({
-  phoneNumber: z
-    .string()
-    .refine(isValidPhoneNumber, { message: "Enter valid phone number" }),
-  otp: z.string(),
+  phoneNumber: z.string().refine(isValidPhoneNumber, { message: "Enter valid phone number" }),
+  otp: z.string()
 });
 
 type FormData = z.infer<typeof loginSchema>;
@@ -51,8 +49,8 @@ export default function PatientSignInForm() {
     mode: "onChange",
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      phoneNumber: "+91",
-    },
+      phoneNumber: "+91"
+    }
   });
   const phoneNumberWatch = formMethods.watch("phoneNumber");
 
@@ -60,52 +58,52 @@ export default function PatientSignInForm() {
     setIsLoading(true);
     await authClient.phoneNumber.sendOtp(
       {
-        phoneNumber: phoneNumberWatch,
+        phoneNumber: phoneNumberWatch
       },
       {
         onSuccess: () => {
           toast.success("OTP sent successfully", {
-            description: "Please check your phone for the OTP",
+            description: "Please check your phone for the OTP"
           });
           setOpenOTP(true);
         },
         onError: () => {
           toast.error("Failed to send OTP", {
             description: "User does not exist with this phone number",
-            duration: 5000,
+            duration: 5000
           });
-        },
-      },
+        }
+      }
     );
     setIsLoading(false);
   };
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
-    setIsLoading(true); 
+    setIsLoading(true);
     await authClient.phoneNumber.verify(
       {
         phoneNumber: data.phoneNumber,
-        code: data.otp,
+        code: data.otp
       },
       {
         onSuccess: async () => {
           toast.success("OTP verified successfully", {
-            description: "You are logged in",
+            description: "You are logged in"
           });
 
           await authClient.signIn.phoneNumber({
             phoneNumber: data.phoneNumber,
-            password: data.otp,
+            password: data.otp
           });
         },
         onError: () => {
           toast.error("Failed to verify OTP", {
             description: "Please try again",
             duration: 5000,
-            className: "bg-destructive",
+            className: "bg-destructive"
           });
-        },
-      },
+        }
+      }
     );
     setIsLoading(false);
   };
@@ -114,22 +112,22 @@ export default function PatientSignInForm() {
     setResendOtp(true);
     await authClient.phoneNumber.sendOtp(
       {
-        phoneNumber: phoneNumberWatch,
+        phoneNumber: phoneNumberWatch
       },
       {
         onSuccess: () => {
           toast.success("OTP sent successfully", {
-            description: "Please check your phone for the OTP",
+            description: "Please check your phone for the OTP"
           });
           setOpenOTP(true);
         },
         onError: () => {
           toast.error("Failed to send OTP", {
             description: "User does not exist with this phone number",
-            duration: 5000,
+            duration: 5000
           });
-        },
-      },
+        }
+      }
     );
   };
 
@@ -203,11 +201,7 @@ export default function PatientSignInForm() {
               type="button"
               onClick={handleGenerateOTP}
               disabled={!isValidPhoneNumber(phoneNumberWatch ?? "") || loading}
-              className={cn(
-                "w-full text-xs sm:text-sm",
-                !phoneNumberWatch && "hidden",
-              )}
-            >
+              className={cn("w-full text-xs sm:text-sm", !phoneNumberWatch && "hidden")}>
               {loading ? (
                 <>
                   <Loader2 className="mr-2 h-6 w-6 animate-spin" />
@@ -225,19 +219,10 @@ export default function PatientSignInForm() {
                 type="button"
                 onClick={handleResendOtp}
                 disabled={resendOtp}
-                className={cn(
-                  "w-full text-xs sm:text-sm",
-                  !phoneNumberWatch && "hidden",
-                )}
-              >
+                className={cn("w-full text-xs sm:text-sm", !phoneNumberWatch && "hidden")}>
                 {resendOtp ? `Resend OTP (${countdown}s)` : "Resend OTP"}
               </Button>
-              <Button
-                type="submit"
-                className={"w-full"}
-                variant="default"
-                disabled={loading}
-              >
+              <Button type="submit" className={"w-full"} variant="default" disabled={loading}>
                 {loading ? (
                   <>
                     <Loader2 className="mr-2 h-6 w-6 animate-spin" />

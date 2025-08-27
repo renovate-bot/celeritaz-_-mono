@@ -45,6 +45,7 @@ interface FormDatePickerProps<T extends FieldValues> {
   disabled?: boolean;
   onSelect?: (d?: Date) => void;
   labelClassName?: string;
+  calendarClassName?: string;
 }
 
 //const formattedDate = format(today, "yyyy-MM-dd");
@@ -64,6 +65,7 @@ const FormDatePicker = <T extends FieldValues>({
   disabled,
   onSelect,
   labelClassName,
+  calendarClassName,
 }: FormDatePickerProps<T>) => {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [age, setAge] = useState<{ years: number; months: number } | null>(
@@ -86,7 +88,7 @@ const FormDatePicker = <T extends FieldValues>({
         <FormItem>
           <FormLabel className={cn(labelClassName)}>
             {label}
-            {required && <span className="ml-1 text-red-600">*</span>}
+            {required && <span className="sm:ml-1 text-red-600">*</span>}
           </FormLabel>
           <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
             <PopoverTrigger asChild>
@@ -116,6 +118,7 @@ const FormDatePicker = <T extends FieldValues>({
                 mode="single"
                 selected={field.value}
                 captionLayout="dropdown-years"
+                className={cn(calendarClassName)}
                 fromYear={fromYear}
                 toYear={toYear}
                 onDayClick={(selectedDate) => {

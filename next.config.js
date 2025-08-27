@@ -5,6 +5,16 @@
 import "./src/env.js";
 
 /** @type {import("next").NextConfig} */
-const config = {};
+const config = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "celeritaz-test.s3.ap-south-2.amazonaws.com",
+        port: ""
+      }
+    ]
+  }
+};
 
 export default config;

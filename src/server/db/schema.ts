@@ -1,19 +1,8 @@
 import { relations } from "drizzle-orm";
-import {
-  boolean,
-  date,
-  decimal,
-  integer,
-  pgEnum,
-  pgTable,
-  primaryKey,
-  serial,
-  text,
-  timestamp,
-  varchar,
-} from "drizzle-orm/pg-core";
+import { boolean, date, decimal, pgEnum, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 
 import { type InferResultType } from "~/server/db/types";
+
 import { common_columns } from "./tables/commonColumns";
 
 export * from "auth-schema";
@@ -23,7 +12,7 @@ export const USER_ROLE = pgEnum("USER_ROLE", [
   "nurse",
   "doctor",
   "admin",
-  "patient",
+  "patient"
 ]);
 
 export type USER_ROLE_ENUM = (typeof USER_ROLE)["enumValues"][number];
@@ -33,7 +22,7 @@ export const USER_STATUS = pgEnum("USER_STATUS", [
   "Available",
   "Busy",
   "Do not disturb",
-  "Be Right Back",
+  "Be Right Back"
 ]);
 export const PURCHASE_ORDER_STATUS = pgEnum("PURCHASE_ORDER_STATUS", [
   "Draft",
@@ -49,7 +38,7 @@ export const PURCHASE_ORDER_STATUS = pgEnum("PURCHASE_ORDER_STATUS", [
   "Invoiced",
   "Paid",
   "Closed",
-  "Cancelled",
+  "Cancelled"
 ]);
 export const BLOOD_GROUP = pgEnum("BLOOD_GROUP", [
   "O+",
@@ -60,7 +49,7 @@ export const BLOOD_GROUP = pgEnum("BLOOD_GROUP", [
   "A-",
   "B-",
   "AB-",
-  "",
+  ""
 ]);
 export const VISIT_TYPES = pgEnum("VISIT_TYPES", ["opd", "ipd"]);
 export const APPOINTMENT_STATUS = pgEnum("APPOINTMENT_STATUS", [
@@ -69,13 +58,9 @@ export const APPOINTMENT_STATUS = pgEnum("APPOINTMENT_STATUS", [
   "scheduled",
   "no show",
   "pending",
-  "unscheduled",
+  "unscheduled"
 ]);
-export const BILLING_ITEM_UNITS = pgEnum("BILLING_ITEM_UNITS", [
-  "day",
-  "item",
-  "hour",
-]);
+export const BILLING_ITEM_UNITS = pgEnum("BILLING_ITEM_UNITS", ["day", "item", "hour"]);
 export const MEDICINE_CATEGORY = pgEnum("MEDICINE_CATEGORY", [
   "Allopathy",
   "Ayurvedic",
@@ -83,33 +68,19 @@ export const MEDICINE_CATEGORY = pgEnum("MEDICINE_CATEGORY", [
   "Drug",
   "Surgical",
   "Generic",
-  "OTC",
+  "OTC"
 ]);
-export const ORDER_BOOK_PRIORITY = pgEnum("ORDER_BOOK_PRIORITY", [
-  "Low",
-  "Medium",
-  "High",
-]);
+export const ORDER_BOOK_PRIORITY = pgEnum("ORDER_BOOK_PRIORITY", ["Low", "Medium", "High"]);
 export const ORDER_STATUS = pgEnum("ORDER_STATUS", [
   "Processing",
   "Ordered",
   "Delivered",
   "Cancelled",
-  "On Hold",
+  "On Hold"
 ]);
-export const REQUESTED_STATUS = pgEnum("REQUESTED_STATUS", [
-  "Approved",
-  "Pending",
-  "Declined",
-]);
-export const CONSULTANT_TYPE = pgEnum("CONSULTANT_TYPE", [
-  "consultant",
-  "unit_admission",
-]);
-export const PAYMENT_STATUS = pgEnum("PAYMENT_STATUS", [
-  "pending",
-  "completed",
-]);
+export const REQUESTED_STATUS = pgEnum("REQUESTED_STATUS", ["Approved", "Pending", "Declined"]);
+export const CONSULTANT_TYPE = pgEnum("CONSULTANT_TYPE", ["consultant", "unit_admission"]);
+export const PAYMENT_STATUS = pgEnum("PAYMENT_STATUS", ["pending", "completed"]);
 
 export const address = pgTable("address", {
   addressId: text("address_id").primaryKey().notNull(),
@@ -124,7 +95,7 @@ export const address = pgTable("address", {
   country: text("country").notNull(),
   pincode: text("pincode").notNull(),
   isPrimary: boolean("primary"),
-  ...common_columns,
+  ...common_columns
 });
 
 export const patient = pgTable("patient", {
@@ -151,18 +122,15 @@ export const patient = pgTable("patient", {
   mlc: boolean("mlc"),
   handleWithCare: boolean("handle_with_care"),
   addressId: text("address_id").references(() => address.addressId, {
-    onDelete: "cascade",
+    onDelete: "cascade"
   }),
-  permanentAddressId: text("permanent_address_id").references(
-    () => address.addressId,
-    {
-      onDelete: "restrict",
-      onUpdate: "cascade",
-    },
-  ),
+  permanentAddressId: text("permanent_address_id").references(() => address.addressId, {
+    onDelete: "restrict",
+    onUpdate: "cascade"
+  }),
   kinAddressId: text("kin_address_id").references(() => address.addressId, {
     onDelete: "restrict",
-    onUpdate: "cascade",
+    onUpdate: "cascade"
   }),
   language: text("language"),
   religion: text("religion"),
@@ -179,43 +147,44 @@ export const patient = pgTable("patient", {
   identityNumber: text("identity_number"),
   samePermanentAddress: boolean("same_permanent_as_current"),
   sameKinAddress: boolean("same_kin_as_current"),
-  ...common_columns,
+  ...common_columns
 });
 
-export const patientRelations = relations(patient, ({ one }) => {
+export const patientRelations = relations(patient, ({ one, many }) => {
   return {
     currentAddress: one(address, {
       fields: [patient.addressId],
-      references: [address.addressId],
+      references: [address.addressId]
     }),
     permanentAddress: one(address, {
       fields: [patient.permanentAddressId],
-      references: [address.addressId],
+      references: [address.addressId]
     }),
     kinAddress: one(address, {
       fields: [patient.kinAddressId],
-      references: [address.addressId],
+      references: [address.addressId]
     }),
     referralDetails: one(referralDetails, {
       fields: [patient.patientId],
-      references: [referralDetails.patientId],
+      references: [referralDetails.patientId]
     }),
     employerDetails: one(employerDetails, {
       fields: [patient.patientId],
-      references: [employerDetails.patientId],
+      references: [employerDetails.patientId]
     }),
     payerDetails: one(payerDetails, {
       fields: [patient.patientId],
-      references: [payerDetails.patientId],
+      references: [payerDetails.patientId]
     }),
     kinDetails: one(kinDetails, {
       fields: [patient.patientId],
-      references: [kinDetails.patientId],
+      references: [kinDetails.patientId]
     }),
     remarksDetails: one(remarks, {
       fields: [patient.patientId],
-      references: [remarks.patientId],
+      references: [remarks.patientId]
     }),
+    emergencyContactDetails: many(emergencyContactDetails)
   };
 });
 export type PatientDetailType = InferResultType<"patient">;
@@ -246,7 +215,7 @@ export const payerDetails = pgTable("payer", {
   memberId: text("member_id"),
   allowNonPayableItems: boolean("allow_non_payable_items"),
   isCoPay: boolean("is_co_pay"),
-  ...common_columns,
+  ...common_columns
 });
 
 export const kinDetails = pgTable("kin", {
@@ -260,7 +229,7 @@ export const kinDetails = pgTable("kin", {
   gender: text("gender"),
   clinicalCounsellingGivenTo: text("clinical_counselling_given_to"),
   financialCounsellingGivenTo: text("financial_counselling_given_to"),
-  ...common_columns,
+  ...common_columns
 });
 
 export const referralDetails = pgTable("referral", {
@@ -275,7 +244,7 @@ export const referralDetails = pgTable("referral", {
   referralName: text("referral_name"),
   referralComment: text("referral_comment"),
   referredInterFacilityName: text("referred_inter_facility_name"),
-  ...common_columns,
+  ...common_columns
 });
 
 export type ReferralType = InferResultType<"referralDetails">;
@@ -297,7 +266,47 @@ export const employerDetails = pgTable("employer", {
   employerCity: text("employer_city"),
   employerState: text("employer_state"),
   employerCountry: text("employer_country"),
-  ...common_columns,
+  ...common_columns
+});
+
+export const emergencyContactDetails = pgTable("emergency_contact", {
+  id: text("id").primaryKey().notNull(),
+  patientId: text("patient_id")
+    .references(() => patient.patientId)
+    .notNull(),
+  firstName: text("first_name").notNull(),
+  middleName: text("middle_name"),
+  lastName: text("last_name"),
+  mobileNumber: text("mobile_number").notNull(),
+  email: text("email"),
+  relation: text("relation").notNull(),
+  ...common_columns
+});
+export const emergencyContactRelations = relations(emergencyContactDetails, ({ one }) => {
+  return {
+    patient: one(patient, {
+      fields: [emergencyContactDetails.patientId],
+      references: [patient.patientId]
+    })
+  };
+});
+
+export const patientIdentity = pgTable("patient_identity", {
+  id: text("id").primaryKey().notNull(),
+  patientId: text("patient_id")
+    .references(() => patient.patientId)
+    .notNull(),
+  type: text("type").notNull(),
+  fileUrl: text("file_url").notNull(),
+  ...common_columns
+});
+export const patientIdentityRelations = relations(patientIdentity, ({ one }) => {
+  return {
+    patient: one(patient, {
+      fields: [patientIdentity.patientId],
+      references: [patient.patientId]
+    })
+  };
 });
 
 export const remarks = pgTable("remarks", {
@@ -305,5 +314,11 @@ export const remarks = pgTable("remarks", {
   patientId: text("patient_id")
     .references(() => patient.patientId)
     .notNull(),
-  remarks: text("remarks"),
+  remarks: text("remarks")
+});
+
+export const s3Test = pgTable("s3_test", {
+  id: text("id").primaryKey().notNull(),
+  key: text("key").notNull(),
+  createdAt: timestamp("created_at").defaultNow()
 });

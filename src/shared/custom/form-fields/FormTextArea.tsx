@@ -18,6 +18,7 @@ interface InputFieldProps<T extends FieldValues> {
   required?: boolean;
   type?: string;
   disabled?: boolean;
+  labelClassName?: string;
 }
 const FormTextarea = <T extends FieldValues>({
   control,
@@ -25,6 +26,7 @@ const FormTextarea = <T extends FieldValues>({
   label,
   placeholder,
   className,
+  labelClassName,
   textClassName,
   required,
   disabled = false
@@ -36,9 +38,9 @@ const FormTextarea = <T extends FieldValues>({
       render={({ field }) => {
         return (
           <FormItem className={cn(className)}>
-            <FormLabel>
+            <FormLabel className={cn(labelClassName)}>
               {label}
-              {required && <span className="ml-1 text-red-600">*</span>}
+              {required && <span className="sm:ml-1 text-red-600">*</span>}
             </FormLabel>
             <FormControl>
               <Textarea

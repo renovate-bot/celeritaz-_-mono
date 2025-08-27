@@ -6,39 +6,51 @@ import { api } from "~/trpc/react";
 
 import LoadingPage from "~/shared/custom/loading-page";
 
-import ProfileCard from "./components/ProfileCard";
 import { useSession } from "~/lib/auth-client";
 
-// import AppointmentsTable from "./components/AppointmentsTable";
-// import ProfileCard from "./components/ProfileCard";
-// import ProfileTabs from "./components/ProfileTabs";
-// import RecentReportsTable from "./components/RecentReportsTable";
+import EmergencyCard from "./components/EmergencyCard";
+import EmployerCard from "./components/EmployerCard";
+import IdentityCard from "./components/IdentityCard";
+import KinCard from "./components/KinCard";
+import OthersCard from "./components/OthersCard";
+import PayerCard from "./components/PayerCard";
+import PersonalCard from "./components/PersonalCard";
+
+import type { inferRouterOutputs } from "@trpc/server";
+import type { AppRouter } from "~/server/api/root";
+
+export type PatientCompleteData =
+  inferRouterOutputs<AppRouter>["patient"]["getPatientCompleteDetailsById"];
 
 const Profile = () => {
   const { data: session } = useSession();
-  const patientId = session?.user?.id;
+  const patientId = "pat_KgUaEk8DWXHeS0";
 
-  const patient = api.patient.getPatientById.useQuery(
+  const {
+    data: patientData,
+    isLoading,
+    error
+  } = api.patient.getPatientCompleteDetailsById.useQuery(
     {
-      id: patientId ?? "",
+      id: patientId ?? ""
     },
     {
-      enabled: !!patientId,
-    },
+      enabled: !!patientId
+    }
   );
 
-  if (patient.isLoading) return <LoadingPage />;
-  if (patient.error) return <div>Error: {patient.error.message}</div>;
+  if (isLoading) return <LoadingPage />;
+  if (error) return <div>Error: {error.message}</div>;
 
   return (
-    <div className="grid h-1/3 w-full grid-cols-1 gap-5 p-4 md:grid-cols-5 md:p-8">
-      <div>
-        {/* <ProfileCard patientId={patientId ?? ""} imgUrl={patient.data?.imgUrl ?? ""} /> */}
-        <ProfileCard />
-      </div>
-      <div className="md:col-span-2">{/* <RecentReportsTable /> */}</div>
-      <div className="md:col-span-2">{/* <AppointmentsTable /> */}</div>
-      <div className="md:col-span-5">{/* <ProfileTabs /> */}</div>
+    <div className="flex h-full w-full flex-col gap-2 p-2">
+      <PersonalCard data={patientData} />
+      <PayerCard data={patientData} />
+      <KinCard data={patientData} />
+      <EmployerCard data={patientData} />
+      <IdentityCard data={patientData} />
+      <OthersCard data={patientData} />
+      <EmergencyCard data={patientData} />
     </div>
   );
 };

@@ -5,9 +5,9 @@ import { useRouter } from "next/navigation";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
-import { authClient, useSession } from "~/lib/auth-client";
 import { useForm } from "react-hook-form";
 import { isValidPhoneNumber } from "react-phone-number-input";
+import { toast } from "sonner";
 import { z } from "zod";
 
 import FormDatePicker from "~/shared/custom/form-fields/FormDatePicker";
@@ -18,36 +18,34 @@ import PhoneInputField from "~/shared/custom/form-fields/PhoneInput";
 import { Button } from "~/shared/shadcn/ui/button";
 import { Form } from "~/shared/shadcn/ui/form";
 
-import { NATIONALITIES } from "~/lib/constants";
+import { authClient, useSession } from "~/lib/auth-client";
+import { nationalities } from "~/lib/constants";
 import { cn } from "~/lib/utils";
 
 import type { SubmitHandler } from "react-hook-form";
-import { toast } from "sonner";
 
 const signUpSchema = z.object({
   firstName: z
     .string({
-      required_error: "First name is required",
+      required_error: "First name is required"
     })
     .min(4, "First name cannot be less than 4 characters")
     .max(20, "First name cannot be longer than 20 characters"),
   lastName: z
     .string({
-      required_error: "Last name is required",
+      required_error: "Last name is required"
     })
     .min(4, "Last name cannot be less than 4 characters")
     .max(20, "Last name cannot be longer than 20 characters"),
   email: z.string().optional(),
-  phone: z
-    .string()
-    .refine(isValidPhoneNumber, { message: "Enter valid phone number" }),
+  phone: z.string().refine(isValidPhoneNumber, { message: "Enter valid phone number" }),
   dob: z.coerce.date({
     required_error: "Date of birth is required",
-    invalid_type_error: "Please provide a valid date of birth",
+    invalid_type_error: "Please provide a valid date of birth"
   }),
   gender: z.string().trim().min(1, { message: "Required" }),
   nationality: z.string().trim().min(1, { message: "Required" }),
-  otp: z.string(),
+  otp: z.string()
 });
 
 type FormData = z.infer<typeof signUpSchema>;
@@ -57,7 +55,7 @@ export default function PatientSignUpForm() {
   const router = useRouter();
   const formMethods = useForm<FormData>({
     mode: "onBlur",
-    resolver: zodResolver(signUpSchema),
+    resolver: zodResolver(signUpSchema)
   });
   const [loading, setLoading] = useState(false); // State for loading
   const [openOTP, setOpenOTP] = useState(false); // State for loading
@@ -69,22 +67,22 @@ export default function PatientSignUpForm() {
     setLoading(true);
     await authClient.phoneNumber.sendOtp(
       {
-        phoneNumber: phoneNumberWatch,
+        phoneNumber: phoneNumberWatch
       },
       {
         onSuccess: () => {
           toast.success("OTP sent successfully", {
-            description: "Please check your phone for the OTP",
+            description: "Please check your phone for the OTP"
           });
           setOpenOTP(true);
         },
         onError: () => {
           toast.error("Failed to send OTP", {
             description: "User does not exist with this phone number",
-            duration: 5000,
+            duration: 5000
           });
-        },
-      },
+        }
+      }
     );
     setLoading(false);
   };
@@ -93,22 +91,22 @@ export default function PatientSignUpForm() {
     setResendOtp(true);
     await authClient.phoneNumber.sendOtp(
       {
-        phoneNumber: phoneNumberWatch,
+        phoneNumber: phoneNumberWatch
       },
       {
         onSuccess: () => {
           toast.success("OTP sent successfully", {
-            description: "Please check your phone for the OTP",
+            description: "Please check your phone for the OTP"
           });
           setOpenOTP(true);
         },
         onError: () => {
           toast.error("Failed to send OTP", {
             description: "User does not exist with this phone number",
-            duration: 5000,
+            duration: 5000
           });
-        },
-      },
+        }
+      }
     );
   };
 
@@ -117,12 +115,12 @@ export default function PatientSignUpForm() {
     await authClient.phoneNumber.verify(
       {
         phoneNumber: data.phone,
-        code: data.otp,
+        code: data.otp
       },
       {
         onSuccess: async () => {
           toast.success("OTP verified successfully", {
-            description: "Account created successfully",
+            description: "Account created successfully"
           });
 
           await authClient.signUp.email({
@@ -130,17 +128,17 @@ export default function PatientSignUpForm() {
             password: data.otp,
             name: `${data.firstName} ${data.lastName}`,
             phoneNumber: data.phone,
-            callbackURL: "/profile",
+            callbackURL: "/profile"
           });
         },
         onError: () => {
           toast.error("Failed to verify OTP", {
             description: "Please try again",
             duration: 5000,
-            className: "bg-destructive",
+            className: "bg-destructive"
           });
-        },
-      },
+        }
+      }
     );
   };
 
@@ -223,7 +221,7 @@ export default function PatientSignUpForm() {
             name="gender"
             selectOptions={[
               { name: "Male", value: "male" },
-              { name: "Female", value: "female" },
+              { name: "Female", value: "female" }
             ]}
             required
           />
@@ -235,7 +233,10 @@ export default function PatientSignUpForm() {
             label="Nationality"
             name="nationality"
             placeholder="Select Nationality"
-            selectOptions={NATIONALITIES}
+            selectOptions={nationalities.map((item) => ({
+              name: item,
+              value: item
+            }))}
             required
           />
           {openOTP && (
@@ -255,12 +256,8 @@ export default function PatientSignUpForm() {
               variant="default"
               type="button"
               disabled={!isValidPhoneNumber(phoneNumberWatch ?? "")}
-              className={cn(
-                "w-full text-xs sm:text-sm",
-                !phoneNumberWatch && "hidden",
-              )}
-              onClick={handleGenerateOTP}
-            >
+              className={cn("w-full text-xs sm:text-sm", !phoneNumberWatch && "hidden")}
+              onClick={handleGenerateOTP}>
               Generate OTP
             </Button>
           )}
@@ -271,11 +268,7 @@ export default function PatientSignUpForm() {
                 type="button"
                 onClick={handleResendOtp}
                 disabled={resendOtp}
-                className={cn(
-                  "w-full text-xs sm:text-sm",
-                  !phoneNumberWatch && "hidden",
-                )}
-              >
+                className={cn("w-full text-xs sm:text-sm", !phoneNumberWatch && "hidden")}>
                 {resendOtp ? `Resend OTP (${countdown}s)` : "Resend OTP"}
               </Button>
               <Button type="submit" className="w-full text-xs sm:text-sm">
